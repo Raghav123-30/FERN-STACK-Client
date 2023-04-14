@@ -1,9 +1,10 @@
 class Actor {
-    constructor(fullName, phone, address, adhar) {
+    constructor(fullName, phone, address, adhar,location) {
       this.fullName = fullName;
       this.phone = phone;
       this.address = address;
       this.adhar = adhar;
+      this.location = location;
     }
   
     validateFullName = () => {
@@ -20,6 +21,9 @@ class Actor {
   
     validateAdhar = () => {
       return this.adhar && this.adhar.length === 12;
+    };
+    validateLocation = () => {
+      return this.location;
     };
   
     getFullName = () => {

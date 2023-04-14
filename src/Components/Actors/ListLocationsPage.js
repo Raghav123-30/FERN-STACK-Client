@@ -117,12 +117,7 @@ export default function ListLocatiosPage(){
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   Adhar Number
                 </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Season
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Service Charge
-                </TableCell>
+               
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   Actions
                 </TableCell>
@@ -141,8 +136,6 @@ export default function ListLocatiosPage(){
                     {item.adharNumber || "N/A"}
                   </TableCell>
                  
-                  <TableCell align="right">{item.season}</TableCell>
-                  <TableCell align="right">{item.cost}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
@@ -152,8 +145,7 @@ export default function ListLocatiosPage(){
                         setAddress(item.address);
                         setPhone(item.phone);
                         setnewPhone(item.phone);
-                        setSeason(item.season);
-                        setServiceCharge(item.cost);
+                       
                         editModalOpener();
                         setId(item.id);
                       }}
