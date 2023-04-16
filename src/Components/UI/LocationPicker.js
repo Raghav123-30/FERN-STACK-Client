@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box'
+import React, { useEffect, useState } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-
 
 export default function LocationPicker(props) {
   const [data, setData] = useState(null);
@@ -23,7 +22,7 @@ export default function LocationPicker(props) {
           setData(data.data);
           console.log(data);
           console.log(data.message);
-          if(data.length == 0){
+          if (data.length == 0) {
             props.setServerState(false);
           }
           setAvailable(true);
@@ -35,21 +34,24 @@ export default function LocationPicker(props) {
         });
     }
     getData();
-  },[])
+  }, []);
   const handleChange = (event, value) => {
-    if(value){
+    if (value) {
       console.log(value);
-    props.setLocation(value.location)
+      props.setLocation(value.location);
+      if (props.setnumTrays) {
+        props.setnumTrays(value.numTrays);
+      }
     }
   };
-  if(!available){
+  if (!available) {
     return (
       <Card
         style={{
           width: "80%",
-         
+
           margin: "0 auto",
-         
+
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
@@ -60,34 +62,26 @@ export default function LocationPicker(props) {
         <p>Fetching data from the server</p>
       </Card>
     );
-  
   }
 
-  if(available){
+  if (available) {
     return (
-     
-        <>
-            <Autocomplete
-             style={{width:'80%',margin:'0 auto' ,marginBottom:'1.5rem'}}
-              options={data}
-              getOptionLabel={(item) => item.location}
-              renderInput={(params) => (
-                <TextField
-                 
-                  {...params}
-                  label="Location"
-                  variant="outlined"
-                />
-              )}
-              renderOption={(props, item) => (
-                <li {...props} key={item.id}>
-                  {item.location}
-                </li>
-              )}
-              onChange={handleChange}
-            />
-          </>
-       
+      <>
+        <Autocomplete
+          style={{ width: "80%", margin: "0 auto", marginBottom: "1.5rem" }}
+          options={data}
+          getOptionLabel={(item) => item.location}
+          renderInput={(params) => (
+            <TextField {...params} label="Location" variant="outlined" />
+          )}
+          renderOption={(props, item) => (
+            <li {...props} key={item.id}>
+              {item.location}
+            </li>
+          )}
+          onChange={handleChange}
+        />
+      </>
     );
   }
 }

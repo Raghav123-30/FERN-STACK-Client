@@ -1,19 +1,19 @@
-import  TableContainer  from "@mui/material/TableContainer"
-import TableHead  from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import  TableCell  from "@mui/material/TableCell"
-import Table from "@mui/material/Table"
-import Paper from "@mui/material/Paper"
-import  TableBody  from "@mui/material/TableBody"
-import Card from "@mui/material/Card"
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Table from "@mui/material/Table";
+import Paper from "@mui/material/Paper";
+import TableBody from "@mui/material/TableBody";
+import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useState,useEffect } from "react"
-export default function ListLocatiosPage(){
+import { useState, useEffect } from "react";
+export default function ListLocatiosPage() {
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
   const [owner, setowner] = useState("");
@@ -117,7 +117,7 @@ export default function ListLocatiosPage(){
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   Adhar Number
                 </TableCell>
-               
+
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   Actions
                 </TableCell>
@@ -131,11 +131,11 @@ export default function ListLocatiosPage(){
                   </TableCell>
                   <TableCell align="right">{item.phone}</TableCell>
                   <TableCell align="right">{item.address}</TableCell>
-                  
+
                   <TableCell align="right">
                     {item.adharNumber || "N/A"}
                   </TableCell>
-                 
+
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
@@ -145,7 +145,7 @@ export default function ListLocatiosPage(){
                         setAddress(item.address);
                         setPhone(item.phone);
                         setnewPhone(item.phone);
-                       
+
                         editModalOpener();
                         setId(item.id);
                       }}

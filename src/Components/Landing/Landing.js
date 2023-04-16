@@ -11,31 +11,25 @@ export default function LandingPage(props) {
   const [password, setPassword] = useState("");
   const [areInputsInvalid, setareInputsInvalid] = useState(false);
 
-  
   const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
 
   const user = props.user;
   const setuser = props.setuser;
-  
+
   const loginHandler = () => {
-    
     if (email.includes("@") && password.length >= 3) {
       setareInputsInvalid(false);
-       if(Authenticate(email,password)){
+      if (Authenticate(email, password)) {
         setIsLoggedIn(true);
-        console.log(setIsLoggedIn)
-       }
-       else{
-        console.log("error")
-       }
-      
+        console.log(setIsLoggedIn);
+      } else {
+        console.log("error");
+      }
     } else {
-      
       setareInputsInvalid(true);
     }
   };
   return (
-    
     <Card
       style={{
         position: "absolute",
@@ -89,6 +83,5 @@ export default function LandingPage(props) {
         </Typography>
       )}
     </Card>
-  
   );
 }
