@@ -3,9 +3,12 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useAuth } from "../../Contexts/AuthContext";
 import { useEffect, useState } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
 import { Authenticate } from "./Authenticate";
-
+import EmailIcon from "@mui/icons-material/Email";
+import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
+import PasswordIcon from "@mui/icons-material/Password";
 export default function LandingPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +48,7 @@ export default function LandingPage(props) {
     >
       <TextField
         required
+        id="input-with-icon-adornment"
         variant="standard"
         label="Email"
         filled
@@ -53,8 +57,17 @@ export default function LandingPage(props) {
         onChange={(event) => {
           setEmail(event.target.value);
         }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon />
+            </InputAdornment>
+          ),
+        }}
       ></TextField>
+
       <TextField
+        id="input-with-icon-adornment"
         variant="standard"
         required
         value={password}
@@ -63,6 +76,13 @@ export default function LandingPage(props) {
         style={{ marginBottom: "1.5rem", width: "90%" }}
         onChange={(event) => {
           setPassword(event.target.value);
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PasswordIcon />
+            </InputAdornment>
+          ),
         }}
       ></TextField>
       <Button

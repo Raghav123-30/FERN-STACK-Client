@@ -7,26 +7,61 @@ import LocationPicker from "../UI/LocationPicker";
 import Actor from "../../OOP/Actor";
 import OtpModalFragment from "../OtpActivity/OtpModal";
 import { useState } from "react";
+import { useModal } from "../../Contexts/ModalContext";
+
 export default function OperatorEditFragment(props) {
-    const currentActor = new Actor(props.fullName, props.phone, props.address, props.adhar);
-    
-    const [otpModal, setOtpModal] = useState(false);
+  const {
+    fullName,
+    setFullName,
+    phone,
+    setPhone,
+    address,
+    newPhone,
+    setnNewPhone,
+    setAddress,
+    location,
+    setLocation,
+    adhar,
+    setAdhar,
+    fullNameError,
+    setFullNameError,
+    phoneError,
+    setPhoneError,
+    addressError,
+    setAddressError,
+    locationError,
+    setLocationError,
+    adharError,
+    setAdharError,
+    otpModal,
+    setOtpModal,
+    verified,
+    setverified,
+    serverState,
+    setServerState,
+    openConfirmation,
+    setOpenConfirmation,
+    isEditModalOpen,
+    setIsEditModalOpen,
+  } = useModal();
+
   const [otp, setotp] = useState("");
   const [otpText, setOtpText] = useState("");
   const [requestMessage, setRequestMessage] = useState("");
   const [confirmFunction, setConfirmFunction] = useState(null);
-  const [verified, setverified] = useState(false);
-    const submitHandler = () => {
-        if(props.newPhone != props.phone){
-            
-        }
+  const currentActor = new Actor(fullName, phone, address, adhar);
+  const submitHandler = () => {
+    if (newPhone != phone) {
     }
-    
+  };
+
   return (
     <>
       <Modal
-        open={props.editModal}
-        onClose={props.editModalCloser}
+        open={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -41,6 +76,7 @@ export default function OperatorEditFragment(props) {
           <Card
             style={{
               width: "35vw",
+
               padding: "0.7rem",
               display: "flex",
               flexDirection: "column",
@@ -53,31 +89,31 @@ export default function OperatorEditFragment(props) {
               label="Fullname"
               style={{ marginBottom: "1.5rem", width: "80%" }}
               variant="standard"
-              value={props.fullName}
+              value={fullName}
               onChange={(event) => {
-                props.setFullName(event.target.value);
+                setFullName(event.target.value);
                 currentActor.fullName = event.target.value;
-                if (props.fullNameError) {
-                  props.setfullNameError(false);
+                if (fullNameError) {
+                  setFullNameError(false);
                 }
               }}
-              error={props.fullNameError}
-              helperText={props.fullNameError ? "Please enter valid name" : ""}
+              error={fullNameError}
+              helperText={fullNameError ? "Please enter valid name" : ""}
             ></TextField>
             <TextField
               label="Phonenumber"
               style={{ marginBottom: "1.5rem", width: "80%" }}
               variant="standard"
-              value={props.phone}
+              value={phone}
               onChange={(event) => {
-                props.setPhone(event.target.value);
+                setPhone(event.target.value);
                 currentActor.phone = event.target.value;
-                if (props.phoneError) {
-                  props.setphoneError(false);
+                if (phoneError) {
+                  setPhoneError(false);
                 }
               }}
-              error={props.phoneError}
-              helperText={props.phoneError ? "Please enter valid phone number" : ""}
+              error={phoneError}
+              helperText={phoneError ? "Please enter valid phone number" : ""}
             ></TextField>
             <TextField
               label="Address"
@@ -85,35 +121,35 @@ export default function OperatorEditFragment(props) {
               rows={5}
               style={{ marginBottom: "1.5rem", width: "80%" }}
               variant="standard"
-              value={props.address}
+              value={address}
               onChange={(event) => {
-                props.setAddress(event.target.value);
+                setAddress(event.target.value);
                 currentActor.address = event.target.value;
-                if (props.addressError) {
-                  props.setAddressError(false);
+                if (addressError) {
+                  setAddressError(false);
                 }
               }}
-              error={props.addressError}
-              helperText={props.addressError ? "Please enter valid address" : ""}
+              error={addressError}
+              helperText={addressError ? "Please enter valid address" : ""}
             ></TextField>
-           
+
             <LocationPicker />
             <TextField
               label="Adharnumber"
               style={{ marginBottom: "1.5rem", width: "80%" }}
               variant="standard"
-              value={props.adhar}
+              value={adhar}
               onChange={(event) => {
-                props.setAdhar(event.target.value);
+                setAdhar(event.target.value);
                 currentActor.adhar = event.target.value;
-                if (props.adharError) {
-                  props.setAdharError(false);
+                if (adharError) {
+                  setAdharError(false);
                 }
               }}
-              error={props.adharError}
-              helperText={props.adharError ? "Please enter valid Adhar number" : ""}
+              error={adharError}
+              helperText={adharError ? "Please enter valid Adhar number" : ""}
             ></TextField>
-            
+
             <Button
               variant="contained"
               color="success"
@@ -125,12 +161,12 @@ export default function OperatorEditFragment(props) {
             <div id="recaptcha-container"></div>
 
             <OtpModalFragment
-              otpModal={props.otpModal}
+              otpModal={otpModal}
               closeotpModal={props.closeotpModal}
-              otp={props.otp}
-              setotp={props.setotp}
+              otp={otp}
+              setotp={setotp}
               handleVerification={props.handleVerification}
-              otpText={props.otpText}
+              otpText={otpText}
             ></OtpModalFragment>
             <p
               style={{
@@ -141,12 +177,11 @@ export default function OperatorEditFragment(props) {
                 textAlign: "center",
               }}
             >
-              {props.requestMessage}
+              {requestMessage}
             </p>
           </Card>
         </Box>
       </Modal>
-      
     </>
   );
 }

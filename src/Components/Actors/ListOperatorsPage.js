@@ -14,36 +14,52 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import OperatorEditFragment from "./list-operator-edit-modal";
 import { useState } from "react";
+import { useModal } from "../../Contexts/ModalContext";
 
 export default function ListOperatorsPage() {
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
-  const [fullName, setFullName] = useState("");
-  const [id, setId] = useState("");
-  const [address, setAddress] = useState("");
-  const [adharNumber, setAdharNumber] = useState("");
-  const [location, setLocation] = useState("");
-  const [phone, setPhone] = useState("");
-  const [newphone, setnewPhone] = useState("");
-  const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [fullNameError, setFullNameError] = useState(false);
-  const [phoneError, setPhoneError] = useState(false);
-  const [addressError, setAddressError] = useState(false);
-  const [adharError, setAdharError] = useState(false);
 
-  const editModalOpener = () => {
-    setEditModal(true);
-  };
-  const editModalCloser = () => {
-    setEditModal(false);
-  };
-  const deleteModalOpener = () => {
-    setDeleteModal(true);
-  };
-  const deleteModalCloser = () => {
-    setDeleteModal(false);
-  };
+  const [id, setId] = useState("");
+
+  const [adharNumber, setAdharNumber] = useState("");
+
+  const {
+    fullName,
+    setFullName,
+    phone,
+    setPhone,
+    address,
+    newPhone,
+    setNewPhone,
+    setAddress,
+    location,
+    setLocation,
+    adhar,
+    setAdhar,
+    fullNameError,
+    setFullNameError,
+    phoneError,
+    setPhoneError,
+    addressError,
+    setAddressError,
+    locationError,
+    setLocationError,
+    adharError,
+    setAdharError,
+    otpModal,
+    setOtpModal,
+    verified,
+    setverified,
+    serverState,
+    setServerState,
+    openConfirmation,
+    setOpenConfirmation,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    editModalOpener,
+  } = useModal();
+
   useEffect(() => {
     async function getData() {
       await fetch("http://localhost:3000/api/listop", {
@@ -151,9 +167,9 @@ export default function ListOperatorsPage() {
                         setAdharNumber(item.adharNumber);
                         setLocation(item.location);
                         setPhone(item.phone);
-                        setnewPhone(item.phone);
-                        setnewPhone(item.phone);
-                        editModalOpener();
+                        setNewPhone(item.phone);
+
+                        setIsEditModalOpen(true);
                         setId(item.id);
                       }}
                     >
@@ -163,7 +179,6 @@ export default function ListOperatorsPage() {
                     <IconButton
                       onClick={() => {
                         setId(item.id);
-                        deleteModalOpener();
                       }}
                     >
                       <DeleteIcon />
@@ -174,30 +189,7 @@ export default function ListOperatorsPage() {
             </TableBody>
           </Table>
         </TableContainer>
-        <OperatorEditFragment
-          fullNameError={fullNameError}
-          adharError={adharError}
-          phoneError={phoneError}
-          addressError={addressError}
-          editModal={editModal}
-          editModalCloser={editModalCloser}
-          fullName={fullName}
-          phone={phone}
-          adhar={adharNumber}
-          address={address}
-          newphone={newphone}
-          setFullNameError={setFullNameError}
-          setAddressError={setAddressError}
-          setAdharError={setAdharError}
-          setPhoneError={setPhoneError}
-          setPhone = {setPhone}
-          setAddress = {setAddress}
-          setAdhar={setAdharNumber}
-          setFullName = {setFullName}
-           
-          setnewPhone={setnewPhone}
-
-        ></OperatorEditFragment>
+        <OperatorEditFragment></OperatorEditFragment>
       </Card>
     );
   }

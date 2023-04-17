@@ -8,22 +8,42 @@ import TableBody from "@mui/material/TableBody";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
+import { useModal } from "../../Contexts/ModalContext";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
+import LocationEditModal from "./List-location-edit-modal";
+import Confirmation from "./confirmationHandlers/Confirmation";
 export default function ListLocatiosPage() {
+  const {
+    otpModal,
+    setOtpModal,
+    fullName,
+    setFullName,
+    phone,
+
+    setPhone,
+
+    address,
+    newPhone,
+    setNewPhone,
+    setAddress,
+    location,
+    setLocation,
+    adhar,
+    setAdhar,
+    openConfirmation,
+    setOpenConfirmation,
+  } = useModal();
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
-  const [owner, setowner] = useState("");
+
   const [id, setId] = useState("");
-  const [address, setAddress] = useState("");
-  const [adharNumber, setAdharNumber] = useState("");
-  const [season, setSeason] = useState("");
-  const [phone, setPhone] = useState("");
+
   const [serviceCharge, setServiceCharge] = useState("");
-  const [newphone, setnewPhone] = useState("");
+
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const editModalOpener = () => {
@@ -139,14 +159,14 @@ export default function ListLocatiosPage() {
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        setowner(item.owner);
+                        setFullName(item.owner);
                         setAddress(item.address);
-                        setAdharNumber(item.adharNumber);
+                        setAdhar(item.adharNumber);
                         setAddress(item.address);
                         setPhone(item.phone);
-                        setnewPhone(item.phone);
+                        setNewPhone(item.phone);
 
-                        editModalOpener();
+                        setOtpModal(true);
                         setId(item.id);
                       }}
                     >
@@ -167,6 +187,7 @@ export default function ListLocatiosPage() {
             </TableBody>
           </Table>
         </TableContainer>
+        <LocationEditModal />
       </Card>
     );
   }

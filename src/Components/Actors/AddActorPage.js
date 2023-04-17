@@ -31,8 +31,7 @@ export default function AddActorPage(props) {
   const [location, setLocation] = useState("");
   const [verified, setverified] = useState(false);
   const [serverState, setServerState] = useState(true);
-  const currentActor = new Actor(fullName, phone, address, adhar,location);
-
+  const currentActor = new Actor(fullName, phone, address, adhar, location);
 
   async function renderOtpVerification() {
     const phoneNumber = "+91" + phone;
@@ -74,10 +73,10 @@ export default function AddActorPage(props) {
         phone: phone,
         address: address,
         adhar: adhar,
-        location:location,
+        location: location,
       });
-      console.log(submitObject)
-      if(role == 'owner'){
+      console.log(submitObject);
+      if (role == "owner") {
         let submitObject = new submitToFirestore({
           fullName: fullName,
           phone: phone,
@@ -85,15 +84,12 @@ export default function AddActorPage(props) {
           adhar: adhar,
         });
       }
-      console.log(submitObject)
-      
-        
-      
-          submitObject.submit();
-     
-        setverified(true);
+      console.log(submitObject);
 
-      
+      submitObject.submit();
+
+      setverified(true);
+
       return true;
     } catch (error) {
       if (error.code === "auth/invalid-verification-code") {
@@ -128,18 +124,16 @@ export default function AddActorPage(props) {
     setAdharError(!isAdharValid);
     if (isFullNameValid && isPhoneValid && isAddressValid && isAdharValid) {
       setFormIsValid(true);
-      
-      // setOtpModal(true);
-      // renderOtpVerification();
+
       let submitObject = new submitToFirestore({
         fullName: fullName,
         phone: phone,
         address: address,
         adhar: adhar,
-        location:location,
+        location: location,
       });
-      console.log(submitObject)
-      if(role == 'owner'){
+      console.log(submitObject);
+      if (role == "owner") {
         let submitObject = new submitToFirestore({
           fullName: fullName,
           phone: phone,
@@ -147,11 +141,9 @@ export default function AddActorPage(props) {
           adhar: adhar,
         });
       }
-      console.log(submitObject)
-      
-        
-      
-          submitObject.submit();
+      console.log(submitObject);
+
+      submitObject.submit();
     }
   };
 
@@ -205,7 +197,14 @@ export default function AddActorPage(props) {
           error={addressError}
           helperText={addressError ? "Please enter valid address" : ""}
         ></TextField>
-        {role == "operator" && <LocationPicker location={location} setLocation={setLocation} serverState={serverState} setServerState={setServerState}/>}
+        {role == "operator" && (
+          <LocationPicker
+            location={location}
+            setLocation={setLocation}
+            serverState={serverState}
+            setServerState={setServerState}
+          />
+        )}
         <TextField
           label="Adharnumber"
           style={{ marginBottom: "1.5rem", width: "80%" }}
@@ -252,29 +251,32 @@ export default function AddActorPage(props) {
         </p>
       </Card>
     );
-  } else if(verified) {
+  } else if (verified) {
     return (
       <Card
         style={{
-          width:'50vw',
-         
-          margin:'0 auto',
-          display:'flex',
-          flexDirection:'row',
+          width: "50vw",
+
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "row",
           marginTop: "5rem",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-       
-          <DoneIcon style={{margin:'2rem',width:'2.5rem',height:'2.5rem',backgroundColor:'green'}}></DoneIcon>
-          <p style={{fontSize:'1.5rem'}}>{role} added successfully</p>
-        
+        <DoneIcon
+          style={{
+            margin: "2rem",
+            width: "2.5rem",
+            height: "2.5rem",
+            backgroundColor: "green",
+          }}
+        ></DoneIcon>
+        <p style={{ fontSize: "1.5rem" }}>{role} added successfully</p>
       </Card>
     );
+  } else if (!serverState) {
+    <ServerIsBusy></ServerIsBusy>;
   }
-  else if(!serverState){
-       <ServerIsBusy></ServerIsBusy>
-  }
-  
 }

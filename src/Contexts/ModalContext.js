@@ -17,6 +17,23 @@ export function ModalProvider({ children }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [adhar, setAdhar] = useState("");
+  const [fullNameError, setFullNameError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [adharError, setAdharError] = useState(false);
+  const [locationError, setLocationError] = useState(false);
+  const [otpModal, setOtpModal] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+
+  const [location, setLocation] = useState("");
+  const [verified, setverified] = useState(false);
+  const [serverState, setServerState] = useState(true);
+  const [newPhone, setNewPhone] = useState("");
+
   const editModalCloser = () => {
     setIsEditModalOpen(false);
   };
@@ -51,6 +68,36 @@ export function ModalProvider({ children }) {
     editModalCloser,
     deleteModalOpener,
     deleteModalCloser,
+    fullName,
+    setFullName,
+    phone,
+    setPhone,
+    address,
+    setAddress,
+    location,
+    setLocation,
+    adhar,
+    setAdhar,
+    fullNameError,
+    setFullNameError,
+    phoneError,
+    setPhoneError,
+    addressError,
+    setAddressError,
+    locationError,
+    setLocationError,
+    adharError,
+    setAdharError,
+    otpModal,
+    setOtpModal,
+    verified,
+    setverified,
+    serverState,
+    setServerState,
+    openConfirmation,
+    setOpenConfirmation,
+    newPhone,
+    setNewPhone,
   };
 
   return (
