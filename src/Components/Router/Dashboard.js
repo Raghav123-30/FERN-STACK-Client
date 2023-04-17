@@ -5,6 +5,7 @@ import ListLocationsPage from "../Actors/ListLocationsPage";
 import Settingspage from "../Settings/settingPage";
 import LandingPage from "../Landing/Landing";
 import HomePage from "../Home/HomePage";
+import AddCropPage from "../Crop/AddCrop";
 import { useAuth } from "../../Contexts/AuthContext";
 
 import { Route, Routes } from "react-router-dom";
@@ -64,6 +65,11 @@ export default function Dashboard() {
             path="/settings"
             exact
             element={<Settingspage></Settingspage>}
+          ></Route>
+          <Route
+            path="/addcrop"
+            exact
+            element={<AddCropPage></AddCropPage>}
           ></Route>
         </Routes>
       </div>

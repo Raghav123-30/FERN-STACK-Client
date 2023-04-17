@@ -46,6 +46,8 @@ export default function LocationEditModal() {
     setServerState,
     openConfirmation,
     setOpenConfirmation,
+    successfulOperation,
+    setSuccessfulOperation,
   } = useModal();
   async function renderOtpVerification() {
     const phoneNumber = "+91" + phone;
@@ -117,6 +119,7 @@ export default function LocationEditModal() {
   }
 
   const submitHandler = () => {
+    setOpenConfirmation(true);
     const currentActor = new Actor(fullName, phone, address, adhar, "");
     const isFullNameValid = currentActor.validateFullName();
     const isPhoneValid = currentActor.validatePhone();

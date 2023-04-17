@@ -2,10 +2,15 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useModal } from "../../../Contexts/ModalContext";
 
 export default function Confirmation(props) {
+  const { successfulOperation, setSuccessfulOperation } = useModal();
   const role = props.role;
   const action = props.action;
+  const handler = () => {
+    setSuccessfulOperation(true);
+  };
   return (
     <Box
       style={{
@@ -41,7 +46,7 @@ export default function Confirmation(props) {
             gap: "2rem",
           }}
         >
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handler}>
             confirm
           </Button>
           <Button variant="contained" color="error">

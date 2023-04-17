@@ -28,6 +28,7 @@ export function ModalProvider({ children }) {
   const [locationError, setLocationError] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [successfulOperation, setSuccessfulOperation] = useState(false);
 
   const [location, setLocation] = useState("");
   const [verified, setverified] = useState(false);
@@ -98,6 +99,8 @@ export function ModalProvider({ children }) {
     setOpenConfirmation,
     newPhone,
     setNewPhone,
+    successfulOperation,
+    setSuccessfulOperation,
   };
 
   return (

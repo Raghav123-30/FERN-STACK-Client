@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import OperatorEditFragment from "./list-operator-edit-modal";
+import DoneIcon from "@mui/icons-material/Done";
 import { useState } from "react";
 import { useModal } from "../../Contexts/ModalContext";
 
@@ -58,6 +59,8 @@ export default function ListOperatorsPage() {
     isEditModalOpen,
     setIsEditModalOpen,
     editModalOpener,
+    successfulOperation,
+    setSuccessfulOperation,
   } = useModal();
 
   useEffect(() => {
@@ -82,7 +85,7 @@ export default function ListOperatorsPage() {
     getData();
   }, []);
 
-  if (!available) {
+  if (!available && !successfulOperation) {
     return (
       <Card
         style={{
@@ -100,9 +103,7 @@ export default function ListOperatorsPage() {
         <p>Fetching data from the server</p>
       </Card>
     );
-  }
-
-  if (available && data.length) {
+  } else if (available && data.length && !successfulOperation) {
     return (
       <Card
         style={{
@@ -190,6 +191,31 @@ export default function ListOperatorsPage() {
           </Table>
         </TableContainer>
         <OperatorEditFragment></OperatorEditFragment>
+      </Card>
+    );
+  } else if (successfulOperation) {
+    return (
+      <Card
+        style={{
+          width: "50vw",
+
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "row",
+          marginTop: "5rem",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <DoneIcon
+          style={{
+            margin: "2rem",
+            width: "2.5rem",
+            height: "2.5rem",
+            backgroundColor: "green",
+          }}
+        ></DoneIcon>
+        <p style={{ fontSize: "1.5rem" }}>operator edited successfully</p>
       </Card>
     );
   }

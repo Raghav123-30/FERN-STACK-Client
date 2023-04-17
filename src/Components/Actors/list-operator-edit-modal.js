@@ -8,6 +8,10 @@ import Actor from "../../OOP/Actor";
 import OtpModalFragment from "../OtpActivity/OtpModal";
 import { useState } from "react";
 import { useModal } from "../../Contexts/ModalContext";
+import { auth } from "../../firebase";
+import Confirmation from "./confirmationHandlers/Confirmation";
+
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 export default function OperatorEditFragment(props) {
   const {
@@ -44,14 +48,98 @@ export default function OperatorEditFragment(props) {
     isEditModalOpen,
     setIsEditModalOpen,
   } = useModal();
+  const [formIsValid, setFormIsValid] = useState(false);
+  async function renderOtpVerification() {
+    const phoneNumber = "+91" + phone;
+    console.log(phoneNumber);
+    const appVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log("Verifying");
+        },
+      },
+      auth
+    );
 
+    await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        try {
+          setConfirmFunction(confirmationResult);
+        } catch {
+          console.log("Something went wrong");
+        }
+      })
+      .catch(() => {
+        setRequestMessage(
+          "Too many OTP requested for the same phone number! please try again after some time"
+        );
+        setOtpModal(false);
+        console.log("You are fucked up");
+      });
+  }
+
+  async function validateOtp() {
+    try {
+      await confirmFunction.confirm(otp);
+      console.log("OTP verified successfully");
+      // let submitObject = new submitToFirestore({
+      //   fullName: fullName,
+      //   phone: phone,
+      //   address: address,
+      //   adhar: adhar,
+      //   location: location,
+      // });
+
+      //call function that makes http request to update the data here
+
+      setverified(true);
+
+      return true;
+    } catch (error) {
+      if (error.code === "auth/invalid-verification-code") {
+        console.log(
+          `Entered OTP ${otp} did not match with the one sent from the server! Please try again`
+        );
+        setOtpText("OTP is invalid");
+      } else {
+        console.log("An error occurred while verifying the OTP:", error);
+        setOtpText("An error occurred while verifying the OTP");
+      }
+      return false;
+    }
+  }
+  const closeotpModal = () => {
+    setOtpModal(false);
+  };
+
+  async function handleVerification() {
+    validateOtp();
+  }
   const [otp, setotp] = useState("");
   const [otpText, setOtpText] = useState("");
   const [requestMessage, setRequestMessage] = useState("");
   const [confirmFunction, setConfirmFunction] = useState(null);
   const currentActor = new Actor(fullName, phone, address, adhar);
   const submitHandler = () => {
-    if (newPhone != phone) {
+    const isFullNameValid = currentActor.validateFullName();
+    const isPhoneValid = currentActor.validatePhone();
+    const isAddressValid = currentActor.validateAddress();
+    const isAdharValid = currentActor.validateAdhar();
+
+    setFullNameError(!isFullNameValid);
+    setPhoneError(!isPhoneValid);
+    setAddressError(!isAddressValid);
+    setAdharError(!isAdharValid);
+
+    if (isFullNameValid && isPhoneValid && isAddressValid && isAdharValid) {
+      if (newPhone != phone) {
+        setFormIsValid(true);
+        setOtpModal(true);
+        renderOtpVerification();
+        setOpenConfirmation(true);
+      }
     }
   };
 
@@ -133,7 +221,6 @@ export default function OperatorEditFragment(props) {
               helperText={addressError ? "Please enter valid address" : ""}
             ></TextField>
 
-            <LocationPicker />
             <TextField
               label="Adharnumber"
               style={{ marginBottom: "1.5rem", width: "80%" }}
@@ -180,6 +267,7 @@ export default function OperatorEditFragment(props) {
               {requestMessage}
             </p>
           </Card>
+          {openConfirmation && <Confirmation role="operator" action="edit" />}
         </Box>
       </Modal>
     </>

@@ -122,8 +122,11 @@ export default function AddActorPage(props) {
     setPhoneError(!isPhoneValid);
     setAddressError(!isAddressValid);
     setAdharError(!isAdharValid);
+
     if (isFullNameValid && isPhoneValid && isAddressValid && isAdharValid) {
       setFormIsValid(true);
+      setOtpModal(true);
+      renderOtpVerification();
 
       let submitObject = new submitToFirestore({
         fullName: fullName,
