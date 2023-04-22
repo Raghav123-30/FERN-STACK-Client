@@ -5,14 +5,28 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import EditModal from "./EditModal";
+import FailedMessage from "./FailureOperation";
 import Button from "@mui/material/Button";
 import AddModal from "./AddModal";
 import { useModal } from "../../Contexts/ModalContext";
-import ConfirmOperation from "./ConfirmOperation";
+
+import SuccessMessage from "./successOperation";
+import Typography from "@mui/material/Typography";
 
 export default function Settingspage() {
-  const { openConfirmation, setOpenConfirmation } = useModal();
+  const {
+    crop,
+    setCrop,
+    mode,
+    setMode,
+    trayCapacity,
+    setTrayCapacity,
+    duration,
+    setDuration,
+    serviceCharge,
+    setServiceCharge,
+  } = useModal();
+  const [error, setError] = useState("");
   const [data, setData] = useState(null);
   const [available, setAvailable] = useState(false);
   const [crops, setCrops] = useState(null);
@@ -21,6 +35,9 @@ export default function Settingspage() {
   const [initialLoad, setInitialLoad] = useState(true);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [locationId, setLocationId] = useState(null);
+  const [operationSuccess, setOperationSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [operationFailed, setOperationFailed] = useState(false);
   useEffect(() => {
     async function getData() {
       await fetch("http://localhost:3000/api/getAllAddress", {
@@ -62,17 +79,77 @@ export default function Settingspage() {
     getData();
     getAllCrops();
   }, []);
+  const cropLocationHandler = () => {
+    if (
+      locationId &&
+      crop &&
+      duration &&
+      trayCapacity &&
+      serviceCharge &&
+      mode
+    ) {
+      const cropLocationData = {
+        id: locationId,
+        crop: crop,
+        duration: duration,
+        trayCapacity: trayCapacity,
+        serviceCharge: serviceCharge,
+        mode: mode,
+      };
+      fetch("http://localhost:3000/api/setCropToLoc", {
+        method: "POST",
+        body: JSON.stringify(cropLocationData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          console.log("SUCCESS");
+          setMessage(`${crop} is set to location successfully`);
+
+          setOperationSuccess(true);
+        } else {
+          setMessage("Failed to add new layout!Try again later");
+
+          setOperationFailed(true);
+        }
+      });
+    } else {
+      setError(
+        "Please pick both location and crop from the pickers provided and then click submit"
+      );
+    }
+  };
   const handleChange = (event, value) => {
     setInitialLoad(false);
+    setError("");
+    setLocationId(value.id);
     if (value && value.numTrays > 0) {
       setLayoutExists(true);
       setnumTrays(value.numTrays);
-      setLocationId(value.id);
+      setCrop(value.crop !== "" ? value.crop : "Not set");
+      setDuration(value.duration || "Not set");
+      setServiceCharge(value.serviceCharge || "Not set");
+      setMode(value.mode !== "" ? value.mode : "Not set");
+      setTrayCapacity(
+        value.trayCapacity !== "" ? value.trayCapacity : "Not set"
+      );
     } else {
       setLayoutExists(false);
       setnumTrays(null);
     }
   };
+  const handleCropPickerChange = (event, value) => {
+    setError("");
+    if (value) {
+      setCrop(value.crop);
+      setDuration(value.duration);
+      setTrayCapacity(value.trayCapacity);
+      setServiceCharge(value.serviceCharge);
+      setMode(value.mode);
+    }
+  };
+
   if (!available) {
     return (
       <Card
@@ -93,7 +170,7 @@ export default function Settingspage() {
     );
   }
 
-  if (available) {
+  if (available && !operationFailed && !operationSuccess) {
     return (
       <Box style={{ width: "80%", margin: "0 auto", marginTop: "10rem" }}>
         <Grid container spacing={2}>
@@ -134,10 +211,11 @@ export default function Settingspage() {
                 height: "30vh",
                 padding: "1rem",
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
+                flexDirection: "column",
+                justifyContent: "center",
                 alignItems: "center",
                 marginTop: "5vh",
+                gap: "2vh",
               }}
             >
               <Autocomplete
@@ -147,7 +225,7 @@ export default function Settingspage() {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Choose crop"
+                    label="Add/Edit crop"
                     variant="outlined"
                   />
                 )}
@@ -156,10 +234,29 @@ export default function Settingspage() {
                     {`Crop :- ${item.crop} , Mode :- ${item.mode} , Servicecharge :-${item.serviceCharge} , Traycapacity:- ${item.trayCapacity}`}
                   </li>
                 )}
+                onChange={handleCropPickerChange}
               />
-              <Button variant="contained" color="error">
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  cropLocationHandler();
+                }}
+              >
                 submit
               </Button>
+              {error && (
+                <p
+                  style={{
+                    textAlign: "center",
+                    color: "red",
+                    fontSize: "0.9rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {error}
+                </p>
+              )}
             </Card>
           </Grid>
           <Grid item xs={12} md={12}>
@@ -196,20 +293,51 @@ export default function Settingspage() {
                     Edit Layout
                   </Button>
                 )}
-                {layoutExists && (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => {
-                      setOpenConfirmation(true);
-                    }}
-                  >
-                    Delete Layout
-                  </Button>
-                )}
               </div>
               {layoutExists && (
                 <Grid container spacing={0.5}>
+                  <Grid item xs={12} md={12} sm={12}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        backgroundColor: "#f2f2f2",
+                        borderRadius: "10px",
+                        padding: "1rem",
+                        boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        style={{ fontWeight: "bold", marginBottom: "0.5rem" }}
+                      >
+                        Crop: {crop}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        style={{ marginBottom: "0.5rem" }}
+                      >
+                        Mode: {mode}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        style={{ marginBottom: "0.5rem" }}
+                      >
+                        Tray Capacity: {trayCapacity}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        style={{ marginBottom: "0.5rem" }}
+                      >
+                        Duration: {duration}
+                      </Typography>
+                      <Typography variant="h6" style={{ marginBottom: 0 }}>
+                        Service Charge: {serviceCharge}
+                      </Typography>
+                    </div>
+                  </Grid>
+
                   {Array.from(Array(numTrays), (e, i) => (
                     <Grid item xs={3} sm={2} md={1} key={i}>
                       <Box
@@ -291,9 +419,26 @@ export default function Settingspage() {
           numTrays={numTrays}
           setnumTrays={setnumTrays}
           locationId={locationId}
+          operationSuccess={operationSuccess}
+          setOperationSuccess={setOperationSuccess}
+          operationFailed={operationFailed}
+          setOperationFailed={setOperationFailed}
+          setMessage={setMessage}
+          message={message}
         ></AddModal>
-        {openConfirmation && <ConfirmOperation></ConfirmOperation>}
       </Box>
+    );
+  } else if (available && operationSuccess) {
+    return (
+      <>
+        <SuccessMessage message={message}></SuccessMessage>
+      </>
+    );
+  } else if (available && operationFailed) {
+    return (
+      <>
+        <FailedMessage message={message}></FailedMessage>;
+      </>
     );
   }
 }

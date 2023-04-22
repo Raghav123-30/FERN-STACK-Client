@@ -11,12 +11,30 @@ export default function AddModal(props) {
     const numTrays = Number(props.numTrays);
     if (numTrays == 0 || numTrays > 0) {
       setNumTraysError(false);
-      fetch("http:localhost:3000/api/updateTray", {
+      const trayData = {
+        id: props.locationId,
+        numTrays: props.numTrays,
+      };
+      console.log(trayData);
+      fetch("http://localhost:3000/api/updateTray", {
         method: "POST",
-        data: JSON.stringify({
-          id: props.locationId,
-          numTrays: props.numTrays,
-        }),
+        body: JSON.stringify(trayData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          console.log("SUCCESS");
+          props.setMessage("New layout is added successfully");
+
+          props.setOpenAddModal(false);
+          props.setOperationSuccess(true);
+        } else {
+          props.setMessage("Failed to add new layout!Try again later");
+
+          props.setOpenAddModal(false);
+          props.setOperationFailed(true);
+        }
       });
     } else {
       setNumTraysError(true);
@@ -25,14 +43,12 @@ export default function AddModal(props) {
   return (
     <Modal
       open={props.openAddModal}
-      onClose={() => {
-        props.setOpenAddModal(false);
-      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box
         style={{
+          width: "70vw",
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -41,15 +57,13 @@ export default function AddModal(props) {
       >
         <Card
           style={{
-            width: "50vw",
-
+            width: "100%",
+            margin: "0 auto",
             padding: "1.5rem",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly",
             alignItems: "center",
-
-            gap: "1.5rem",
           }}
         >
           <TextField
@@ -80,9 +94,13 @@ export default function AddModal(props) {
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-around",
+              justifyContent: "center",
               alignItems: "center",
-              gap: "5vw",
+
+              width: "90%",
+              gap: "2vw",
+              marginTop: "2vh",
+              marginBottom: "2vh",
             }}
           >
             <Button
@@ -99,7 +117,6 @@ export default function AddModal(props) {
               style={{ display: "block", margin: "0 auto", width: "50%" }}
               onClick={() => {
                 props.setOpenAddModal(false);
-                window.location.reload();
               }}
             >
               Cancel

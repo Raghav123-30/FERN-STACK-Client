@@ -15,6 +15,7 @@ export function ModalProvider({ children }) {
   const [trayCapacity, setTrayCapacity] = useState("");
   const [locationId, setLocationId] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [duration, setDuration] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [fullName, setFullName] = useState("");
@@ -101,6 +102,8 @@ export function ModalProvider({ children }) {
     setNewPhone,
     successfulOperation,
     setSuccessfulOperation,
+    duration,
+    setDuration,
   };
 
   return (
