@@ -116,7 +116,7 @@ export default function Settingspage() {
       });
     } else {
       setError(
-        "Please pick both location and crop from the pickers provided and then click submit"
+        "Please pick both location and crop from the pickers provided and then click submit button"
       );
     }
   };
