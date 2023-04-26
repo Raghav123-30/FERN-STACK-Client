@@ -23,9 +23,9 @@ export default function LocationEditModal() {
     address,
     setAddress,
     newPhone,
-    setnNewPhone,
+
     otp,
-    setOtp,
+
     adhar,
     setAdhar,
     fullNameError,
@@ -40,14 +40,12 @@ export default function LocationEditModal() {
     setAdharError,
     otpModal,
     setOtpModal,
-    verified,
+
     setverified,
     serverState,
     setServerState,
     openConfirmation,
     setOpenConfirmation,
-    successfulOperation,
-    setSuccessfulOperation,
   } = useModal();
   async function renderOtpVerification() {
     const phoneNumber = "+91" + phone;
@@ -84,15 +82,6 @@ export default function LocationEditModal() {
     try {
       await confirmFunction.confirm(otp);
       console.log("OTP verified successfully");
-      // let submitObject = new submitToFirestore({
-      //   fullName: fullName,
-      //   phone: phone,
-      //   address: address,
-      //   adhar: adhar,
-      //   location: location,
-      // });
-
-      //call function that makes http request to update the data here
 
       setverified(true);
 
@@ -142,9 +131,6 @@ export default function LocationEditModal() {
   return (
     <Modal
       open={otpModal}
-      onClose={() => {
-        setOtpModal(false);
-      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -154,23 +140,26 @@ export default function LocationEditModal() {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          maxWidth: "400px",
         }}
       >
         <Card
           style={{
-            width: "35vw",
+            width: "65vw",
+            maxWidth: "400px",
 
-            padding: "0.7rem",
+            padding: "0.1rem",
+
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly",
+            justifyContent: "center",
             alignItems: "center",
-            gap: "1.5rem",
+            gap: "2vh",
           }}
         >
           <TextField
             label="Fullname"
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            style={{ width: "80%" }}
             variant="standard"
             value={fullName}
             onChange={(event) => {
@@ -185,7 +174,7 @@ export default function LocationEditModal() {
           ></TextField>
           <TextField
             label="phone"
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            style={{ width: "80%" }}
             variant="standard"
             value={phone}
             onChange={(event) => {
@@ -202,7 +191,7 @@ export default function LocationEditModal() {
             label="Address"
             multiline
             rows={5}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            style={{ width: "80%" }}
             variant="standard"
             value={address}
             onChange={(event) => {
@@ -219,7 +208,7 @@ export default function LocationEditModal() {
             label="Adharnumber"
             multiline
             rows={5}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            style={{ width: "80%" }}
             variant="standard"
             value={adhar}
             onChange={(event) => {
@@ -233,16 +222,30 @@ export default function LocationEditModal() {
             helperText={adharError ? "Please enter valid service charge" : ""}
           ></TextField>
 
-          <Button
-            variant="contained"
-            color="success"
-            style={{ display: "block", margin: "0 auto", width: "50%" }}
-            onClick={submitHandler}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
           >
-            submit
-          </Button>
+            {" "}
+            <Button variant="contained" color="success" onClick={submitHandler}>
+              submit
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setOtpModal(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </Card>
-        {openConfirmation && <Confirmation role="location" action="edit" />}
+        {openConfirmation && <Confirmation role="owner" action="edit" />}
       </Box>
     </Modal>
   );

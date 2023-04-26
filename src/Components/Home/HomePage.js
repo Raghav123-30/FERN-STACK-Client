@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function HomePage() {
   const [location, setLocation] = useState();
   const [numTrays, setnumTrays] = useState();
+  const [locationId, setLocationId] = useState();
   return (
     <>
       <div
@@ -34,6 +35,7 @@ export default function HomePage() {
             location={location}
             setLocation={setLocation}
             setnumTrays={setnumTrays}
+            setLocationId={setLocationId}
           ></LocationPicker>
         </Card>
         {!numTrays && (

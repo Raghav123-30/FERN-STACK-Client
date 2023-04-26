@@ -1,9 +1,10 @@
 class Crop {
-  constructor(crop, mode, trayCapacity, serviceCharge) {
+  constructor(crop, mode, trayCapacity, serviceCharge, duration) {
     this.crop = crop;
     this.mode = mode;
     this.serviceCharge = serviceCharge;
     this.trayCapacity = trayCapacity;
+    this.duration = duration;
   }
 
   validatecrop = () => {
@@ -22,6 +23,10 @@ class Crop {
 
   validatetrayCapacity = () => {
     return this.trayCapacity > 0;
+  };
+
+  validateDuration = () => {
+    return this.duration > 0;
   };
 
   getcrop = () => {

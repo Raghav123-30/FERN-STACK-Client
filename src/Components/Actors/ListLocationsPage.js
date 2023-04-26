@@ -15,7 +15,9 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
 import LocationEditModal from "./List-location-edit-modal";
+
 import Confirmation from "./confirmationHandlers/Confirmation";
+import SuccessMessage from "../Settings/successOperation";
 export default function ListLocatiosPage() {
   const {
     otpModal,
@@ -23,9 +25,7 @@ export default function ListLocatiosPage() {
     fullName,
     setFullName,
     phone,
-
     setPhone,
-
     address,
     newPhone,
     setNewPhone,
@@ -36,14 +36,18 @@ export default function ListLocatiosPage() {
     setAdhar,
     openConfirmation,
     setOpenConfirmation,
+    message,
+    successfulOperation,
+    setDocumentId,
+    role,
+    setRole,
+    action,
+    setAction,
   } = useModal();
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
-
   const [id, setId] = useState("");
-
   const [serviceCharge, setServiceCharge] = useState("");
-
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const editModalOpener = () => {
@@ -84,8 +88,9 @@ export default function ListLocatiosPage() {
     return (
       <Card
         style={{
-          width: "50vw",
-          height: "50vh",
+          width: "90vw",
+          maxWidth: "800px",
+          height: "20vh",
           margin: "0 auto",
           marginTop: "5rem",
           display: "flex",
@@ -100,11 +105,12 @@ export default function ListLocatiosPage() {
     );
   }
 
-  if (available && data.length) {
+  if (available && data.length && !successfulOperation) {
     return (
       <Card
         style={{
-          width: "70%",
+          width: "90vw",
+          maxWidth: "800px",
           margin: "0 auto",
           marginTop: "5rem",
           padding: "1rem",
@@ -166,8 +172,11 @@ export default function ListLocatiosPage() {
                         setPhone(item.phone);
                         setNewPhone(item.phone);
 
+                        setDocumentId(item.id);
+                        console.log(item.id);
+                        setRole("owner");
+                        setAction("edit");
                         setOtpModal(true);
-                        setId(item.id);
                       }}
                     >
                       <ModeEditOutlineIcon></ModeEditOutlineIcon>
@@ -177,6 +186,8 @@ export default function ListLocatiosPage() {
                       onClick={() => {
                         setId(item.id);
                         deleteModalOpener();
+                        setRole("owner");
+                        setAction("delete");
                       }}
                     >
                       <DeleteIcon />
@@ -190,5 +201,7 @@ export default function ListLocatiosPage() {
         <LocationEditModal />
       </Card>
     );
+  } else if (available && successfulOperation) {
+    return <SuccessMessage message={message}></SuccessMessage>;
   }
 }

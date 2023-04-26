@@ -1,13 +1,13 @@
-import  Modal  from "@mui/material/Modal";
+import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import  Button  from "@mui/material/Button";
-import  Card  from "@mui/material/Card";
-export default function OtpModalFragment(props){
-    return(<>
-        <Modal
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+export default function OtpModalFragment(props) {
+  return (
+    <>
+      <Modal
         open={props.otpModal}
-        onClose={props.closeotpModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -21,18 +21,19 @@ export default function OtpModalFragment(props){
         >
           <Card
             style={{
-              width: "35vw",
-              padding: "0.7rem",
+              width: "90vw",
+              maxWidth: "400px",
+              padding: "0.2rem",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-evenly",
+              justifyContent: "space-between",
               alignItems: "center",
               gap: "1.5rem",
             }}
           >
             <TextField
               label="Enter OTP"
-              style={{ width: "90%", marginTop: "0.5rem" }}
+              style={{ width: "90%", marginTop: "1rem" }}
               placeholder="XXXXXX"
               value={props.otp}
               onChange={(event) => {
@@ -42,15 +43,26 @@ export default function OtpModalFragment(props){
 
             <Button
               variant="contained"
-              color="secondary"
+              color="warning"
               onClick={props.handleVerification}
             >
               Submit
             </Button>
-            <p style={{marginTop:'1rem', color:'red', fontSize:'0.7rem', textTransform:'uppercase', textAlign:'center'}}>{props.otpText}</p>
+            {props.otpText && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "0.8rem",
+                  textTransform: "uppercase",
+                  textAlign: "center",
+                }}
+              >
+                {props.otpText}
+              </p>
+            )}
           </Card>
         </Box>
       </Modal>
-      </>
-    )
+    </>
+  );
 }

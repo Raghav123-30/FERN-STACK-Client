@@ -1,82 +1,61 @@
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
 import Table from "@mui/material/Table";
+import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
-import { useEffect } from "react";
+import { useModal } from "../../Contexts/ModalContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
-import OperatorEditFragment from "./list-operator-edit-modal";
+import { useState, useEffect } from "react";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import CropEditModal from "./List-crop-edit-modal";
 import SuccessMessage from "../Settings/successOperation";
-import { useState } from "react";
-import Modal from "@mui/material/Modal";
-import { useModal } from "../../Contexts/ModalContext";
-import DoneIcon from "@mui/icons-material/Done";
-import ReportProblemSharpIcon from "@mui/icons-material/ReportProblemSharp";
-import { Button, Typography } from "@mui/material";
-export default function ListOperatorsPage() {
+export default function ListCropPage() {
+  const {
+    crop,
+    setCrop,
+    serviceCharge,
+    setServiceCharge,
+    mode,
+    setMode,
+    trayCapacity,
+    setTrayCapacity,
+    documentId,
+    setDocumentId,
+    duration,
+    setDuration,
+    setRole,
+    role,
+    setAction,
+    action,
+    successfulOperation,
+    message,
+  } = useModal();
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
   const [id, setId] = useState("");
-  const [delModalVisible, setDelModalVisible] = useState(false);
-  const [deleted, setDeleted] = useState(false);
-  const {
-    fullName,
-    setFullName,
-    phone,
-    setPhone,
-    address,
-    newPhone,
-    setNewPhone,
-    setAddress,
-    location,
-    setLocation,
-    adhar,
-    setAdhar,
-    fullNameError,
-    setFullNameError,
-    phoneError,
-    setPhoneError,
-    addressError,
-    setAddressError,
-    locationError,
-    setLocationError,
-    adharError,
-    setAdharError,
-    otpModal,
-    setOtpModal,
-    verified,
-    setverified,
-    serverState,
-    setServerState,
-    openConfirmation,
-    setOpenConfirmation,
-    isEditModalOpen,
-    setIsEditModalOpen,
-    editModalOpener,
-    documentId,
-    setDocumentId,
-    message,
-    setMessage,
-    setRole,
-    setAction,
-    successfulOperation,
-  } = useModal();
-  const delModalOpener = () => {
-    setDelModalVisible(true);
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const editModalOpener = () => {
+    setEditModal(true);
   };
-  const closedelModalHandler = () => {
-    setDelModalVisible(false);
+  const editModalCloser = () => {
+    setEditModal(false);
+  };
+  const deleteModalOpener = () => {
+    setDeleteModal(true);
+  };
+  const deleteModalCloser = () => {
+    setDeleteModal(false);
   };
   useEffect(() => {
     async function getData() {
-      await fetch("http://localhost:3000/api/listop", {
+      await fetch("http://localhost:3000/api/listcrop", {
         method: "GET",
       })
         .then((response) => {
@@ -95,27 +74,6 @@ export default function ListOperatorsPage() {
     }
     getData();
   }, []);
-
-  const deleteHandler = () => {
-    console.log("Deleting document with ID:", documentId);
-    fetch("http://localhost:3000/api/deleteop", {
-      method: "POST",
-      body: JSON.stringify({
-        id: documentId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        console.log("Response:", response);
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Data:", data);
-        console.log(data.message);
-      });
-  };
 
   if (!available) {
     return (
@@ -144,6 +102,7 @@ export default function ListOperatorsPage() {
         style={{
           width: "90vw",
           maxWidth: "800px",
+
           margin: "0 auto",
           marginTop: "5rem",
           padding: "1rem",
@@ -151,10 +110,7 @@ export default function ListOperatorsPage() {
         }}
       >
         <TableContainer component={Paper}>
-          <IconButton
-            style={{ margin: "1rem", float: "right" }}
-            onClick={() => console.log("Download button clicked")}
-          >
+          <IconButton style={{ margin: "1rem", float: "right" }}>
             <DownloadIcon />
           </IconButton>
           <Table aria-label="simple table">
@@ -166,18 +122,18 @@ export default function ListOperatorsPage() {
               }}
             >
               <TableRow>
-                <TableCell style={{ fontWeight: "bold" }}>Full Name</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Crop </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Phone Number
+                  Mode
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Address
+                  Tray Capacity (in Kg)
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
-                  A3S Location
+                  Service Charge (in Rs)
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Adhar Number
+                  Duration (in days)
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   Actions
@@ -186,39 +142,36 @@ export default function ListOperatorsPage() {
             </TableHead>
             <TableBody>
               {data.map((item) => (
-                <TableRow key={item.fullName}>
+                <TableRow key={item.crop}>
                   <TableCell component="th" scope="row">
-                    {item.fullName}
+                    {item.crop}
                   </TableCell>
-                  <TableCell align="right">{item.phone}</TableCell>
-                  <TableCell align="right">{item.address}</TableCell>
-                  <TableCell align="right">{item.location}</TableCell>
-                  <TableCell align="right">
-                    {item.adharNumber || "N/A"}
-                  </TableCell>
+                  <TableCell align="right">{item.mode}</TableCell>
+                  <TableCell align="right">{item.trayCapacity}</TableCell>
+                  <TableCell align="right">{item.serviceCharge}</TableCell>
+                  <TableCell align="right">{item.duration}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        setFullName(item.fullName);
-                        setAddress(item.address);
-                        setAdhar(item.adharNumber);
-                        setLocation(item.location);
-                        setPhone(item.phone);
-                        setNewPhone(item.phone);
-                        setRole("operator");
-                        setAction("edit");
+                        setCrop(item.crop);
+                        setMode(item.mode);
+                        setTrayCapacity(item.trayCapacity);
+                        setServiceCharge(item.serviceCharge);
+                        setDuration(item.duration);
                         setDocumentId(item.id);
-                        setIsEditModalOpen(true);
+                        setId(item.id);
+                        setRole("crop");
+                        setAction("edit");
+                        editModalOpener();
                       }}
                     >
                       <ModeEditOutlineIcon></ModeEditOutlineIcon>
                     </IconButton>
                     <IconButton
-                      onClick={async () => {
-                        setDocumentId(item.id);
-                        console.log(documentId);
-
-                        deleteHandler();
+                      onClick={() => {
+                        setRole("crop");
+                        setAction("delete");
+                        setId(item.id);
                       }}
                     >
                       <DeleteIcon />
@@ -229,7 +182,12 @@ export default function ListOperatorsPage() {
             </TableBody>
           </Table>
         </TableContainer>
-        <OperatorEditFragment></OperatorEditFragment>
+        <CropEditModal
+          editModal={editModal}
+          setEditModal={setEditModal}
+          deleteModal={deleteModal}
+          setDeleteModal={setDeleteModal}
+        ></CropEditModal>
       </Card>
     );
   } else if (available && successfulOperation) {

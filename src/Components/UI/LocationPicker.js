@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function LocationPicker(props) {
@@ -39,6 +38,7 @@ export default function LocationPicker(props) {
     if (value) {
       console.log(value);
       props.setLocation(value.location);
+      props.setLocationId(value.id);
       if (props.setnumTrays) {
         props.setnumTrays(value.numTrays);
       }
@@ -68,7 +68,7 @@ export default function LocationPicker(props) {
     return (
       <>
         <Autocomplete
-          style={{ width: "80%", margin: "0 auto", marginBottom: "1.5rem" }}
+          style={{ width: "90%", margin: "0 auto", marginBottom: "1.5rem" }}
           options={data}
           getOptionLabel={(item) => item.location}
           renderInput={(params) => (

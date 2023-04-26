@@ -211,6 +211,7 @@ export default function Settingspage() {
                 height: "30vh",
                 padding: "1rem",
                 display: "flex",
+
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",

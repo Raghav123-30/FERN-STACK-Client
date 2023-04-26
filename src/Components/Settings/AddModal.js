@@ -48,11 +48,12 @@ export default function AddModal(props) {
     >
       <Box
         style={{
-          width: "70vw",
+          width: "90vw",
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          maxWidth: "300px",
         }}
       >
         <Card

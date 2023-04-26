@@ -30,11 +30,15 @@ export function ModalProvider({ children }) {
   const [otpModal, setOtpModal] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [successfulOperation, setSuccessfulOperation] = useState(false);
-
+  const [confirmMessage, setConfirmMessage] = useState("");
   const [location, setLocation] = useState("");
   const [verified, setverified] = useState(false);
   const [serverState, setServerState] = useState(true);
   const [newPhone, setNewPhone] = useState("");
+  const [documentId, setDocumentId] = useState("");
+  const [message, setMessage] = useState("");
+  const [role, setRole] = useState("");
+  const [action, setAction] = useState("");
 
   const editModalCloser = () => {
     setIsEditModalOpen(false);
@@ -104,6 +108,14 @@ export function ModalProvider({ children }) {
     setSuccessfulOperation,
     duration,
     setDuration,
+    documentId,
+    setDocumentId,
+    message,
+    setMessage,
+    role,
+    setRole,
+    action,
+    setAction,
   };
 
   return (

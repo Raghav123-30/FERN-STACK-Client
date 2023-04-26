@@ -5,14 +5,18 @@ const FailedMessage = (props) => {
   return (
     <Card
       style={{
-        width: "50vw",
-
+        width: "90vw",
+        maxWidth: "500px",
         margin: "0 auto",
         display: "flex",
         flexDirection: "row",
-        marginTop: "5rem",
+
         justifyContent: "center",
         alignItems: "center",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%,-50%)",
       }}
     >
       <ErrorIcon

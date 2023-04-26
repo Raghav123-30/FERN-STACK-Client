@@ -7,7 +7,7 @@ import LandingPage from "../Landing/Landing";
 import HomePage from "../Home/HomePage";
 import AddCropPage from "../Crop/AddCrop";
 import { useAuth } from "../../Contexts/AuthContext";
-
+import ListCropPage from "../Crop/Listcrop";
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 export default function Dashboard() {
@@ -70,6 +70,11 @@ export default function Dashboard() {
             path="/addcrop"
             exact
             element={<AddCropPage></AddCropPage>}
+          ></Route>
+          <Route
+            path="/listcrop"
+            exact
+            element={<ListCropPage></ListCropPage>}
           ></Route>
         </Routes>
       </div>

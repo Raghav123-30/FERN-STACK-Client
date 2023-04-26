@@ -5,12 +5,129 @@ import Button from "@mui/material/Button";
 import { useModal } from "../../../Contexts/ModalContext";
 
 export default function Confirmation(props) {
-  const { successfulOperation, setSuccessfulOperation } = useModal();
-  const role = props.role;
-  const action = props.action;
-  const handler = () => {
-    setSuccessfulOperation(true);
-  };
+  const {
+    fullName,
+    setFullName,
+    phone,
+    setPhone,
+    address,
+    newPhone,
+    setNewPhone,
+    setAddress,
+    location,
+    setLocation,
+    adhar,
+    setAdhar,
+    fullNameError,
+    setFullNameError,
+    phoneError,
+    setPhoneError,
+    addressError,
+    setAddressError,
+    locationError,
+    setLocationError,
+    adharError,
+    setAdharError,
+    otpModal,
+    setOtpModal,
+    verified,
+    setverified,
+    serverState,
+    setServerState,
+    openConfirmation,
+    setOpenConfirmation,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    editModalOpener,
+    documentId,
+    setDocumentId,
+    setSuccessfulOperation,
+    setMessage,
+    crop,
+
+    serviceCharge,
+
+    mode,
+
+    trayCapacity,
+
+    duration,
+
+    role,
+    action,
+  } = useModal();
+
+  function handler() {
+    if (role == "operator" && action == "edit") {
+      fetch("http://localhost:3000/api/updateop", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+          fullName: fullName,
+          phone: phone,
+          adhar: adhar,
+          address: address,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Operator edited successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "owner" && action == "edit") {
+      fetch("http://localhost:3000/api/updateloc", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+          owner: fullName,
+          phoneno: phone,
+          adhar: adhar,
+          address: address,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Location edited successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "crop" && action == "edit") {
+      fetch("http://localhost:3000/api/updatecrop", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+          crop: crop,
+          mode: mode,
+          trayCapacity: trayCapacity,
+
+          duration: duration,
+          serviceCharge: serviceCharge,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Crop edited successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    }
+  }
   return (
     <Box
       style={{
@@ -22,15 +139,16 @@ export default function Confirmation(props) {
     >
       <Card
         style={{
-          width: "50vw",
-          height: "35vh",
+          width: "90vw",
+
+          maxWidth: "500px",
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           gap: "2rem",
-          padding: "0.1rem",
+          padding: "1rem",
         }}
       >
         <Typography variant="h6" color="red" style={{ textAlign: "center" }}>
@@ -49,7 +167,13 @@ export default function Confirmation(props) {
           <Button variant="contained" color="primary" onClick={handler}>
             confirm
           </Button>
-          <Button variant="contained" color="error">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              setOpenConfirmation(false);
+            }}
+          >
             cancel
           </Button>
         </div>

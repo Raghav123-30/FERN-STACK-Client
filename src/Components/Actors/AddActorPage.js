@@ -31,6 +31,7 @@ export default function AddActorPage(props) {
   const [location, setLocation] = useState("");
   const [verified, setverified] = useState(false);
   const [serverState, setServerState] = useState(true);
+  const [locationId, setLocationId] = useState("");
   const currentActor = new Actor(fullName, phone, address, adhar, location);
 
   async function renderOtpVerification() {
@@ -74,6 +75,7 @@ export default function AddActorPage(props) {
         address: address,
         adhar: adhar,
         location: location,
+        locationId: locationId,
       });
       console.log(submitObject);
       if (role == "owner") {
@@ -155,7 +157,7 @@ export default function AddActorPage(props) {
       <Card className={`${classes.card}`}>
         <TextField
           label="Fullname"
-          style={{ marginBottom: "1.5rem", width: "80%" }}
+          style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={fullName}
           onChange={(event) => {
@@ -170,7 +172,7 @@ export default function AddActorPage(props) {
         ></TextField>
         <TextField
           label="Phonenumber"
-          style={{ marginBottom: "1.5rem", width: "80%" }}
+          style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={phone}
           onChange={(event) => {
@@ -187,7 +189,7 @@ export default function AddActorPage(props) {
           label="Address"
           multiline
           rows={5}
-          style={{ marginBottom: "1.5rem", width: "80%" }}
+          style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={address}
           onChange={(event) => {
@@ -206,11 +208,12 @@ export default function AddActorPage(props) {
             setLocation={setLocation}
             serverState={serverState}
             setServerState={setServerState}
+            setLocationId={setLocationId}
           />
         )}
         <TextField
           label="Adharnumber"
-          style={{ marginBottom: "1.5rem", width: "80%" }}
+          style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={adhar}
           onChange={(event) => {

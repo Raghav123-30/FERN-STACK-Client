@@ -4,39 +4,11 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import Crop from "../../OOP/Crop";
+import Confirmation from "../Actors/confirmationHandlers/Confirmation";
 import { useState } from "react";
-
-export default function EditModal() {
-  const [cropError, setCropError] = useState();
-  const [modeError, setModeError] = useState();
-  const [serviceChargeError, setServiceChargeError] = useState();
-  const [trayCapacityError, setTrayCapacityError] = useState();
-  const [formIsValid, setFormIsValid] = useState(false);
-  const submitHandler = () => {
-    const currentCrop = new Crop(crop, mode, trayCapacity, serviceCharge);
-
-    setCropError(!currentCrop.validatecrop());
-    setServiceChargeError(!currentCrop.validateserviceCharge());
-    setTrayCapacityError(!currentCrop.validatetrayCapacity());
-    setModeError(!currentCrop.validatemode());
-
-    console.log(
-      currentCrop.crop,
-      currentCrop.mode,
-      currentCrop.trayCapacity,
-      currentCrop.serviceCharge
-    );
-
-    if (!cropError && !modeError && !serviceChargeError && !trayCapacityError) {
-      setFormIsValid(true);
-    } else {
-      setFormIsValid(false);
-    }
-  };
+import Crop from "../../OOP/Crop";
+export default function CropEditModal(props) {
   const {
-    somethingIsRequested,
-    setsomethingisRequested,
     crop,
     setCrop,
     serviceCharge,
@@ -45,18 +17,53 @@ export default function EditModal() {
     setMode,
     trayCapacity,
     setTrayCapacity,
-    locationId,
-    setLocationId,
-    isEditModalOpen,
-    setIsEditModalOpen,
-
-    editModalOpener,
-    editModalCloser,
+    openConfirmation,
+    setOpenConfirmation,
+    duration,
+    setDuration,
   } = useModal();
+
+  const [cropError, setCropError] = useState();
+  const [modeError, setModeError] = useState();
+  const [serviceChargeError, setServiceChargeError] = useState();
+  const [trayCapacityError, setTrayCapacityError] = useState();
+  const [durationError, setDurationError] = useState();
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  const submitHandler = () => {
+    const currentCrop = new Crop(
+      crop,
+      mode,
+      trayCapacity,
+      serviceCharge,
+      duration
+    );
+    setCropError(!currentCrop.validatecrop());
+    setServiceChargeError(!currentCrop.validateserviceCharge());
+    setTrayCapacityError(!currentCrop.validatetrayCapacity());
+    setModeError(!currentCrop.validatemode());
+    setDurationError(!currentCrop.validateDuration());
+    if (
+      !cropError &&
+      !modeError &&
+      !serviceChargeError &&
+      !trayCapacityError &&
+      !durationError
+    ) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  };
+  const closeHandler = () => {
+    props.setEditModal(false);
+  };
+  const openConfirmModal = () => {
+    setOpenConfirmation(true);
+  };
   return (
     <Modal
-      open={isEditModalOpen}
-      onClose={editModalCloser}
+      open={props.editModal}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -70,20 +77,20 @@ export default function EditModal() {
       >
         <Card
           style={{
-            width: "35vw",
-
+            width: "90vw",
+            maxWidth: "500px",
             padding: "0.7rem",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly",
             alignItems: "center",
-            gap: "1.5rem",
-            maxWidth: "300px",
+            gap: "5vh",
           }}
         >
           <TextField
             label="Crop"
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            type="text"
+            style={{ width: "80%" }}
             variant="standard"
             value={crop}
             onChange={(event) => {
@@ -95,15 +102,17 @@ export default function EditModal() {
             }}
             error={cropError}
             helperText={cropError ? "Please enter valid crop" : ""}
-          ></TextField>
+          >
+            {" "}
+          </TextField>
           <TextField
             label="Mode"
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            type="text"
+            style={{ width: "80%" }}
             variant="standard"
             value={mode}
             onChange={(event) => {
               setMode(event.target.value);
-
               if (modeError) {
                 setModeError(false);
               }
@@ -112,10 +121,10 @@ export default function EditModal() {
             helperText={modeError ? "Please enter valid mode" : ""}
           ></TextField>
           <TextField
-            label="Tray Capacity"
-            multiline
-            rows={5}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            label="Tray Capacity (in Kg)"
+            type="number"
+            inputProps={{ min: 0 }}
+            style={{ width: "80%" }}
             variant="standard"
             value={trayCapacity}
             onChange={(event) => {
@@ -130,9 +139,9 @@ export default function EditModal() {
           ></TextField>
           <TextField
             label="Service Charge"
-            multiline
-            rows={5}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
+            type="number"
+            inputProps={{ min: 0 }}
+            style={{ width: "80%" }}
             variant="standard"
             value={serviceCharge}
             onChange={(event) => {
@@ -147,16 +156,52 @@ export default function EditModal() {
               serviceChargeError ? "Please enter valid service charge" : ""
             }
           ></TextField>
+          <TextField
+            label="Duration (in days)"
+            type="number"
+            inputProps={{ min: 0 }}
+            style={{ width: "80%" }}
+            variant="standard"
+            value={duration}
+            onChange={(event) => {
+              setDuration(event.target.value);
 
-          <Button
-            variant="contained"
-            color="success"
-            style={{ display: "block", margin: "0 auto", width: "50%" }}
-            onClick={submitHandler}
+              if (durationError) {
+                setDurationError(false);
+              }
+            }}
+            error={durationError}
+            helperText={durationError ? "Please enter valid duration" : ""}
+          ></TextField>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
           >
-            submit
-          </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                openConfirmModal();
+              }}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                closeHandler();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </Card>
+        {openConfirmation && <Confirmation></Confirmation>}
       </Box>
     </Modal>
   );

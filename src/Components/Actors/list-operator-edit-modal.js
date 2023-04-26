@@ -76,7 +76,6 @@ export default function OperatorEditFragment(props) {
           "Too many OTP requested for the same phone number! please try again after some time"
         );
         setOtpModal(false);
-        console.log("You are fucked up");
       });
   }
 
@@ -95,6 +94,8 @@ export default function OperatorEditFragment(props) {
       //call function that makes http request to update the data here
 
       setverified(true);
+      setOpenConfirmation(true);
+      closeotpModal();
 
       return true;
     } catch (error) {
@@ -139,6 +140,8 @@ export default function OperatorEditFragment(props) {
         setOtpModal(true);
         renderOtpVerification();
         setOpenConfirmation(true);
+      } else {
+        setOpenConfirmation(true);
       }
     }
   };
@@ -147,9 +150,6 @@ export default function OperatorEditFragment(props) {
     <>
       <Modal
         open={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -159,18 +159,24 @@ export default function OperatorEditFragment(props) {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            overflowY: "auto",
           }}
         >
           <Card
             style={{
-              width: "35vw",
+              width: "80vw",
+
+              maxWidth: "500px",
 
               padding: "0.7rem",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-evenly",
+              justifyContent: "center",
               alignItems: "center",
-              gap: "1.5rem",
+              transformOrigin: "center",
+              height: "100%",
+              maxHeight: "100vh",
+              overflow: "auto",
             }}
           >
             <TextField
@@ -237,14 +243,31 @@ export default function OperatorEditFragment(props) {
               helperText={adharError ? "Please enter valid Adhar number" : ""}
             ></TextField>
 
-            <Button
-              variant="contained"
-              color="success"
-              style={{ display: "block", margin: "0 auto", width: "50%" }}
-              onClick={submitHandler}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                gap: "1rem",
+              }}
             >
-              submit
-            </Button>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={submitHandler}
+              >
+                submit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
             <div id="recaptcha-container"></div>
 
             <OtpModalFragment
@@ -252,7 +275,7 @@ export default function OperatorEditFragment(props) {
               closeotpModal={props.closeotpModal}
               otp={otp}
               setotp={setotp}
-              handleVerification={props.handleVerification}
+              handleVerification={handleVerification}
               otpText={otpText}
             ></OtpModalFragment>
             <p
