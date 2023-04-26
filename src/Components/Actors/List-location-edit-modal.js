@@ -8,6 +8,7 @@ import Confirmation from "./confirmationHandlers/Confirmation";
 import { useState } from "react";
 import { auth } from "../../firebase";
 import Actor from "../../OOP/Actor";
+import OtpModalFragment from "../OtpActivity/OtpModal";
 
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 export default function LocationEditModal() {
@@ -15,6 +16,7 @@ export default function LocationEditModal() {
   const [requestMessage, setRequestMessage] = useState("");
   const [otpText, setOtpText] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
+  const [otp, setotp] = useState("");
   const {
     fullName,
     setFullName,
@@ -23,8 +25,6 @@ export default function LocationEditModal() {
     address,
     setAddress,
     newPhone,
-
-    otp,
 
     adhar,
     setAdhar,
@@ -46,7 +46,12 @@ export default function LocationEditModal() {
     setServerState,
     openConfirmation,
     setOpenConfirmation,
+    isEditModalOpen,
+    setIsEditModalOpen,
   } = useModal();
+  const closeotpModal = () => {
+    setOtpModal(false);
+  };
   async function renderOtpVerification() {
     const phoneNumber = "+91" + phone;
     console.log(phoneNumber);
@@ -84,6 +89,8 @@ export default function LocationEditModal() {
       console.log("OTP verified successfully");
 
       setverified(true);
+      closeotpModal();
+      setOpenConfirmation(true);
 
       return true;
     } catch (error) {
@@ -99,16 +106,12 @@ export default function LocationEditModal() {
       return false;
     }
   }
-  const closeotpModal = () => {
-    setOtpModal(false);
-  };
 
   async function handleVerification() {
     validateOtp();
   }
 
   const submitHandler = () => {
-    setOpenConfirmation(true);
     const currentActor = new Actor(fullName, phone, address, adhar, "");
     const isFullNameValid = currentActor.validateFullName();
     const isPhoneValid = currentActor.validatePhone();
@@ -124,13 +127,16 @@ export default function LocationEditModal() {
 
       //make http request to update the data here
       if (phone != newPhone) {
+        setOtpModal(true);
         renderOtpVerification();
+      } else {
+        setOpenConfirmation(true);
       }
     }
   };
   return (
     <Modal
-      open={otpModal}
+      open={isEditModalOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -148,7 +154,7 @@ export default function LocationEditModal() {
             width: "65vw",
             maxWidth: "400px",
 
-            padding: "0.1rem",
+            padding: "0.5rem",
 
             display: "flex",
             flexDirection: "column",
@@ -244,6 +250,28 @@ export default function LocationEditModal() {
               Cancel
             </Button>
           </div>
+
+          <div id="recaptcha-container"></div>
+
+          <OtpModalFragment
+            otpModal={otpModal}
+            closeotpModal={closeotpModal}
+            otp={otp}
+            setotp={setotp}
+            handleVerification={handleVerification}
+            otpText={otpText}
+          ></OtpModalFragment>
+          <p
+            style={{
+              marginTop: "1rem",
+              color: "red",
+              fontSize: "0.7rem",
+              textTransform: "uppercase",
+              textAlign: "center",
+            }}
+          >
+            {requestMessage}
+          </p>
         </Card>
         {openConfirmation && <Confirmation role="owner" action="edit" />}
       </Box>

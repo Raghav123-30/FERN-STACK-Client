@@ -44,6 +44,8 @@ export default function ListLocatiosPage() {
     action,
     isDeletionEnabled,
     setIsDeletionEnabled,
+    isEditModalOpen,
+    setIsEditModalOpen,
     setAction,
   } = useModal();
   const [available, setAvailable] = useState(false);
@@ -178,7 +180,7 @@ export default function ListLocatiosPage() {
                         console.log(item.id);
                         setRole("owner");
                         setAction("edit");
-                        setOtpModal(true);
+                        setIsEditModalOpen(true);
                       }}
                     >
                       <ModeEditOutlineIcon></ModeEditOutlineIcon>
