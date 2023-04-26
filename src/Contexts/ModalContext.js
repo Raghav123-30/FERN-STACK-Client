@@ -39,6 +39,7 @@ export function ModalProvider({ children }) {
   const [message, setMessage] = useState("");
   const [role, setRole] = useState("");
   const [action, setAction] = useState("");
+  const [isDeletionEnabled, setIsDeletionEnabled] = useState(false);
 
   const editModalCloser = () => {
     setIsEditModalOpen(false);
@@ -116,6 +117,8 @@ export function ModalProvider({ children }) {
     setRole,
     action,
     setAction,
+    isDeletionEnabled,
+    setIsDeletionEnabled,
   };
 
   return (

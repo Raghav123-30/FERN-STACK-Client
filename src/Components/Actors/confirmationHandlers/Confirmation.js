@@ -55,9 +55,11 @@ export default function Confirmation(props) {
 
     role,
     action,
+    setIsDeletionEnabled,
   } = useModal();
 
   function handler() {
+    console.log(role, action);
     if (role == "operator" && action == "edit") {
       fetch("http://localhost:3000/api/updateop", {
         method: "POST",
@@ -126,6 +128,63 @@ export default function Confirmation(props) {
           console.log("Failed");
         }
       });
+    } else if (role == "crop" && action == "delete") {
+      console.log("Hi bro");
+      fetch("http://localhost:3000/api/deletecrop", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Crop deleted successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "owner" && action == "delete") {
+      console.log("Hi bro");
+      fetch("http://localhost:3000/api/deleteloc", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("location deleted successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "operator" && action == "delete") {
+      console.log("Hi bro");
+      fetch("http://localhost:3000/api/deleteop", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("operator deleted successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
     }
   }
   return (
@@ -172,6 +231,7 @@ export default function Confirmation(props) {
             color="error"
             onClick={() => {
               setOpenConfirmation(false);
+              setIsDeletionEnabled(false);
             }}
           >
             cancel

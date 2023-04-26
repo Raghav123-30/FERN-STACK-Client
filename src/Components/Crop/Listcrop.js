@@ -15,6 +15,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CropEditModal from "./List-crop-edit-modal";
 import SuccessMessage from "../Settings/successOperation";
+import Confirmation from "../Actors/confirmationHandlers/Confirmation";
 export default function ListCropPage() {
   const {
     crop,
@@ -35,6 +36,8 @@ export default function ListCropPage() {
     action,
     successfulOperation,
     message,
+    isDeletionEnabled,
+    setIsDeletionEnabled,
   } = useModal();
   const [available, setAvailable] = useState(false);
   const [data, setData] = useState(null);
@@ -171,7 +174,8 @@ export default function ListCropPage() {
                       onClick={() => {
                         setRole("crop");
                         setAction("delete");
-                        setId(item.id);
+                        setIsDeletionEnabled(true);
+                        setDocumentId(item.id);
                       }}
                     >
                       <DeleteIcon />
@@ -188,6 +192,7 @@ export default function ListCropPage() {
           deleteModal={deleteModal}
           setDeleteModal={setDeleteModal}
         ></CropEditModal>
+        {isDeletionEnabled && <Confirmation />}
       </Card>
     );
   } else if (available && successfulOperation) {

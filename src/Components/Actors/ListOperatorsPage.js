@@ -14,6 +14,7 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import OperatorEditFragment from "./list-operator-edit-modal";
 import SuccessMessage from "../Settings/successOperation";
+import Confirmation from "./confirmationHandlers/Confirmation";
 import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { useModal } from "../../Contexts/ModalContext";
@@ -67,6 +68,8 @@ export default function ListOperatorsPage() {
     setRole,
     setAction,
     successfulOperation,
+    isDeletionEnabled,
+    setIsDeletionEnabled,
   } = useModal();
   const delModalOpener = () => {
     setDelModalVisible(true);
@@ -214,11 +217,11 @@ export default function ListOperatorsPage() {
                       <ModeEditOutlineIcon></ModeEditOutlineIcon>
                     </IconButton>
                     <IconButton
-                      onClick={async () => {
+                      onClick={() => {
                         setDocumentId(item.id);
-                        console.log(documentId);
-
-                        deleteHandler();
+                        setRole("operator");
+                        setAction("delete");
+                        setIsDeletionEnabled(true);
                       }}
                     >
                       <DeleteIcon />
@@ -230,6 +233,7 @@ export default function ListOperatorsPage() {
           </Table>
         </TableContainer>
         <OperatorEditFragment></OperatorEditFragment>
+        {isDeletionEnabled && <Confirmation></Confirmation>}
       </Card>
     );
   } else if (available && successfulOperation) {

@@ -42,6 +42,8 @@ export default function ListLocatiosPage() {
     role,
     setRole,
     action,
+    isDeletionEnabled,
+    setIsDeletionEnabled,
     setAction,
   } = useModal();
   const [available, setAvailable] = useState(false);
@@ -184,10 +186,11 @@ export default function ListLocatiosPage() {
 
                     <IconButton
                       onClick={() => {
-                        setId(item.id);
-                        deleteModalOpener();
+                        setDocumentId(item.id);
+
                         setRole("owner");
                         setAction("delete");
+                        setIsDeletionEnabled(true);
                       }}
                     >
                       <DeleteIcon />
@@ -199,6 +202,7 @@ export default function ListLocatiosPage() {
           </Table>
         </TableContainer>
         <LocationEditModal />
+        {isDeletionEnabled && <Confirmation></Confirmation>}
       </Card>
     );
   } else if (available && successfulOperation) {
