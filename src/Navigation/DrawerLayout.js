@@ -3,6 +3,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
+import AccessibilityIcon from "@mui/icons-material/Accessibility";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -234,6 +235,19 @@ export default function PersistentDrawerLeft() {
                 <SettingsIcon></SettingsIcon>
               </ListItemIcon>
               <ListItemText primary="Settings" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/impact");
+            }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <AccessibilityIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pequrel Impact" />
             </ListItemButton>
           </ListItem>
           <ListItem

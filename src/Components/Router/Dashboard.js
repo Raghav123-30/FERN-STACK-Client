@@ -10,6 +10,7 @@ import { useAuth } from "../../Contexts/AuthContext";
 import ListCropPage from "../Crop/Listcrop";
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import ImpactPage from "../Home/impact";
 export default function Dashboard() {
   const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
   useEffect(() => {
@@ -75,6 +76,11 @@ export default function Dashboard() {
             path="/listcrop"
             exact
             element={<ListCropPage></ListCropPage>}
+          ></Route>
+          <Route
+            path="/impact"
+            exact
+            element={<ImpactPage></ImpactPage>}
           ></Route>
         </Routes>
       </div>
