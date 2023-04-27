@@ -129,26 +129,6 @@ export default function AddActorPage(props) {
       setFormIsValid(true);
       setOtpModal(true);
       renderOtpVerification();
-
-      let submitObject = new submitToFirestore({
-        fullName: fullName,
-        phone: phone,
-        address: address,
-        adhar: adhar,
-        location: location,
-      });
-      console.log(submitObject);
-      if (role == "owner") {
-        let submitObject = new submitToFirestore({
-          fullName: fullName,
-          phone: phone,
-          address: address,
-          adhar: adhar,
-        });
-      }
-      console.log(submitObject);
-
-      submitObject.submit();
     }
   };
 

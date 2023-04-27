@@ -109,7 +109,7 @@ export default function HomePage() {
               textTransform: "uppercase",
             }}
           >
-            Currently there are no orders made in this location
+            Currently there are no active orders in this location
           </p>
           <Grid container spacing={0.5}>
             {Array.from(Array(numTrays), (e, i) => (
