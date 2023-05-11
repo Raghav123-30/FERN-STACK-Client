@@ -17,6 +17,7 @@ export function ModalProvider({ children }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [duration, setDuration] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [perTrayCapacity, setPerTrayCapacity] = useState("");
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");

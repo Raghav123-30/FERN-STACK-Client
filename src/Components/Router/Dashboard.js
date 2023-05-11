@@ -10,6 +10,7 @@ import { useAuth } from "../../Contexts/AuthContext";
 import ListCropPage from "../Crop/Listcrop";
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import MainContainer from "../GeographicalCropManagement/MainContainer";
 import ImpactPage from "../Home/impact";
 export default function Dashboard() {
   const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
@@ -81,6 +82,11 @@ export default function Dashboard() {
             path="/impact"
             exact
             element={<ImpactPage></ImpactPage>}
+          ></Route>
+          <Route
+            path="/geography"
+            exact
+            element={<MainContainer></MainContainer>}
           ></Route>
         </Routes>
       </div>
