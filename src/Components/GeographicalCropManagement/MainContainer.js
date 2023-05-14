@@ -4,6 +4,7 @@ import AddGeography from "./AddGeography";
 import AddVillage from "./AddVillage";
 import AddDryingCrops from "./AddDryingCrops";
 import AddGrowingCrops from "./AddGrowingCrops";
+import ListingData from "./ListingData";
 export default function MainContainer() {
   return (
     <div style={{ marginTop: "5rem" }}>
@@ -71,7 +72,9 @@ export default function MainContainer() {
               justifyContent: "center",
               alignItems: "center",
             }}
-          ></Card>
+          >
+            <ListingData />
+          </Card>
         </Grid>
       </Grid>
     </div>
