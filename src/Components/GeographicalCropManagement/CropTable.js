@@ -20,21 +20,21 @@ import Button from "@mui/material/Button";
 export default function CropTable() {
   const [Loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
-  const [geographies, setGeographies] = useState([]);
-  const [geographyId, setGeographyID] = useState("");
+
+  const [chosenId, setChosenID] = useState("");
   const [chosen, setChosen] = useState(false);
+  const [villages, setVillages] = useState([]);
 
   async function handleChoice() {
-    console.log("helllo");
-    console.log("geogphy ID is ", geographyId);
+    setChosen(false);
     await fetchFromServer();
     setDocuments((prevDocuments) => {
-      return prevDocuments.filter((item) => item.geographyId === geographyId);
+      return prevDocuments.filter((item) => item.villageid === chosenId);
     });
     setChosen(true);
   }
   async function fetchFromServer() {
-    await fetch("http://localhost:3000/api/getAllVillages", {
+    await fetch("http://localhost:3000/api/getVillageCrops", {
       method: "GET",
     })
       .then((response) => {
@@ -44,18 +44,18 @@ export default function CropTable() {
         setDocuments(data.data);
       });
   }
-  async function getGeographies() {
-    await fetch("http://localhost:3000/api/getAllGeography")
+  async function getAllVillages() {
+    await fetch("http://localhost:3000/api/getAllVillages")
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setGeographies(data.data);
+        setVillages(data.data);
         setLoading(false);
       });
   }
   useEffect(() => {
-    getGeographies();
+    getAllVillages();
     setLoading(true);
 
     fetchFromServer();
@@ -90,38 +90,31 @@ export default function CropTable() {
           }}
         >
           <Autocomplete
-            style={{ width: "150%", marginBottom: "1.5vh" }}
-            options={geographies}
-            getOptionLabel={(item) => item.region}
+            style={{
+              width: "150%",
+              marginBottom: "1.5rem",
+              marginTop: "1.5rem",
+            }}
+            options={villages}
+            getOptionLabel={(item) => item.village}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="pick geography"
-                variant="outlined"
-              />
+              <TextField {...params} label="pick village" variant="outlined" />
             )}
             renderOption={(props, item) => (
               <li {...props} key={item.id}>
-                {item.region}
+                {item.village}
               </li>
             )}
             onChange={(event, value) => {
               if (value) {
-                setGeographyID(value.id);
+                setChosenID(value.id);
+                handleChoice();
               }
             }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ width: "10vw" }}
-            onClick={handleChoice}
-          >
-            Submit
-          </Button>
         </div>
 
-        {chosen && (
+        {chosen && documents.length > 0 && (
           <Card
             style={{
               width: "90vw",
@@ -148,8 +141,14 @@ export default function CropTable() {
                   }}
                 >
                   <TableRow>
-                    <TableCell style={{ fontWeight: "bold" }}>Taluk</TableCell>
-                    <TableCell style={{ fontWeight: "bold" }}>Vilage</TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      Cropname
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>mode</TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>period</TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      pertraycapacity
+                    </TableCell>
 
                     <TableCell style={{ fontWeight: "bold" }} align="right">
                       Actions
@@ -160,10 +159,16 @@ export default function CropTable() {
                   {documents.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell component="th" scope="row">
-                        {item.taluk}
+                        {item.cropname}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {item.village}
+                        {item.mode}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {item.period}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {item.pertraycapacity}
                       </TableCell>
 
                       <TableCell align="right">
@@ -179,6 +184,25 @@ export default function CropTable() {
                 </TableBody>
               </Table>
             </TableContainer>
+          </Card>
+        )}
+        {chosen && documents.length == 0 && (
+          <Card
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "red",
+                fontSize: "2vh",
+                textTransform: "uppercase",
+              }}
+            >
+              No crops added in this village
+            </p>
           </Card>
         )}
       </div>

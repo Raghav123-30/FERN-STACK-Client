@@ -27,11 +27,18 @@ export default function VillageTable() {
   async function handleChoice() {
     console.log("helllo");
     console.log("geogphy ID is ", geographyId);
+    setChosen(false);
     await fetchFromServer();
     setDocuments((prevDocuments) => {
       return prevDocuments.filter((item) => item.geographyId === geographyId);
     });
     setChosen(true);
+  }
+  async function handleSelect(event, value) {
+    if (value) {
+      setGeographyID(value.id);
+      await handleChoice();
+    }
   }
   async function fetchFromServer() {
     await fetch("http://localhost:3000/api/getAllVillages", {
@@ -105,20 +112,8 @@ export default function VillageTable() {
                 {item.region}
               </li>
             )}
-            onChange={(event, value) => {
-              if (value) {
-                setGeographyID(value.id);
-              }
-            }}
+            onChange={handleSelect}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ width: "10vw" }}
-            onClick={handleChoice}
-          >
-            Submit
-          </Button>
         </div>
 
         {chosen && (
@@ -179,6 +174,25 @@ export default function VillageTable() {
                 </TableBody>
               </Table>
             </TableContainer>
+          </Card>
+        )}
+        {chosen && documents.length == 0 && (
+          <Card
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "red",
+                fontSize: "2vh",
+                textTransform: "uppercase",
+              }}
+            >
+              No villages added in this geography
+            </p>
           </Card>
         )}
       </div>
