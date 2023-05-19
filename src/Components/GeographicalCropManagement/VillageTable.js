@@ -23,6 +23,7 @@ export default function VillageTable() {
   const [geographies, setGeographies] = useState([]);
   const [geographyId, setGeographyID] = useState("");
   const [chosen, setChosen] = useState(false);
+  const [geography, setGeography] = useState("");
 
   async function handleChoice() {
     console.log("helllo");
@@ -37,7 +38,7 @@ export default function VillageTable() {
   async function handleSelect(event, value) {
     if (value) {
       setGeographyID(value.id);
-      await handleChoice();
+      setGeography(value.region);
     }
   }
   async function fetchFromServer() {
@@ -92,6 +93,7 @@ export default function VillageTable() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
+
             gap: "2vw",
             alignItems: "center",
           }}
@@ -114,6 +116,9 @@ export default function VillageTable() {
             )}
             onChange={handleSelect}
           />
+          <Button variant="text" onClick={handleChoice}>
+            submit
+          </Button>
         </div>
 
         {chosen && (
@@ -143,6 +148,9 @@ export default function VillageTable() {
                   }}
                 >
                   <TableRow>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      Geography
+                    </TableCell>
                     <TableCell style={{ fontWeight: "bold" }}>Taluk</TableCell>
                     <TableCell style={{ fontWeight: "bold" }}>Vilage</TableCell>
 
@@ -154,6 +162,9 @@ export default function VillageTable() {
                 <TableBody>
                   {documents.map((item) => (
                     <TableRow key={item.id}>
+                      <TableCell component="th" scope="row">
+                        {geography}
+                      </TableCell>
                       <TableCell component="th" scope="row">
                         {item.taluk}
                       </TableCell>

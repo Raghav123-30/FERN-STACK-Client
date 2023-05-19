@@ -108,10 +108,12 @@ export default function CropTable() {
             onChange={(event, value) => {
               if (value) {
                 setChosenID(value.id);
-                handleChoice();
               }
             }}
           />
+          <Button variant="contained" onClick={handleChoice}>
+            submit
+          </Button>
         </div>
 
         {chosen && documents.length > 0 && (

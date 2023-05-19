@@ -12,6 +12,7 @@ import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import MainContainer from "../GeographicalCropManagement/MainContainer";
 import ImpactPage from "../Home/impact";
+import MainConfiguration from "../SetupManagement/MainConfiguration";
 export default function Dashboard() {
   const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
   useEffect(() => {
@@ -87,6 +88,11 @@ export default function Dashboard() {
             path="/geography"
             exact
             element={<MainContainer></MainContainer>}
+          ></Route>
+          <Route
+            path="/configure"
+            exact
+            element={<MainConfiguration></MainConfiguration>}
           ></Route>
         </Routes>
       </div>

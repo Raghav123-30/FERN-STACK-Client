@@ -153,7 +153,7 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <AddBusinessIcon></AddBusinessIcon>
               </ListItemIcon>
-              <ListItemText primary="Add Location" />
+              <ListItemText primary="Add Owner" />
             </ListItemButton>
           </ListItem>
           <ListItem
@@ -166,7 +166,21 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <ListIcon></ListIcon>
               </ListItemIcon>
-              <ListItemText primary="List Location" />
+              <ListItemText primary="List Owner" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/configure");
+            }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <AddBusinessIcon></AddBusinessIcon>
+              </ListItemIcon>
+              <ListItemText primary="Configure Setup" />
             </ListItemButton>
           </ListItem>
           <ListItem

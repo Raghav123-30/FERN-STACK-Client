@@ -25,8 +25,7 @@ export default function AddGrowingCrops() {
 
     mode,
     setMode,
-    trayCapacity,
-    setTrayCapacity,
+
     duration,
     setDuration,
   } = useModal();
@@ -57,7 +56,6 @@ export default function AddGrowingCrops() {
     if (
       village.trim().length < 3 ||
       crop.trim().length < 2 ||
-      parseInt(trayCapacity.trim()) < 1 ||
       parseInt(duration.trim()) < 1
     ) {
       alert("Please enter valid inputs");
@@ -68,7 +66,6 @@ export default function AddGrowingCrops() {
         period: duration,
         villageid: villageID,
         mode: "Growing",
-        pertraycapacity: trayCapacity,
       });
       if (result) {
         setSuccess(true);
@@ -76,7 +73,6 @@ export default function AddGrowingCrops() {
         setVillage("");
         setCrop("");
         setDuration("");
-        setTrayCapacity("");
       } else {
         setError(true);
       }
@@ -154,7 +150,7 @@ export default function AddGrowingCrops() {
         )}
         {village && (
           <TextField
-            label="Duration to grow (in days)"
+            label="Period to grow (in days)"
             type="number"
             inputProps={{ min: 1 }}
             style={{ marginBottom: "1.5rem", width: "80%" }}
@@ -166,26 +162,6 @@ export default function AddGrowingCrops() {
             error={duration != "" && duration < 1}
             helperText={
               duration !== "" && duration < 1
-                ? "Please enter a valid capacity"
-                : ""
-            }
-          />
-        )}
-
-        {village && (
-          <TextField
-            label="Tray Capacity (number of seedlings)"
-            type="number"
-            inputProps={{ min: 0 }}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
-            variant="standard"
-            value={trayCapacity}
-            onChange={(event) => {
-              setTrayCapacity(event.target.value);
-            }}
-            error={trayCapacity !== "" && trayCapacity < 1}
-            helperText={
-              trayCapacity !== "" && trayCapacity < 1
                 ? "Please enter a valid capacity"
                 : ""
             }
@@ -217,7 +193,6 @@ export default function AddGrowingCrops() {
                 setEnabled(false);
                 setCrop("");
                 setDuration("");
-                setTrayCapacity("");
               }}
               variant="contained"
               color="error"

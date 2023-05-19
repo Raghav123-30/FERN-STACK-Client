@@ -23,10 +23,6 @@ export default function AddDryingCrops() {
     crop,
     setCrop,
 
-    mode,
-    setMode,
-    trayCapacity,
-    setTrayCapacity,
     duration,
     setDuration,
   } = useModal();
@@ -57,7 +53,6 @@ export default function AddDryingCrops() {
     if (
       village.trim().length < 3 ||
       crop.trim().length < 2 ||
-      parseInt(trayCapacity.trim()) < 1 ||
       parseInt(duration.trim()) < 1
     ) {
       alert("Please enter valid inputs");
@@ -68,7 +63,6 @@ export default function AddDryingCrops() {
         period: duration,
         villageid: villageID,
         mode: "Drying",
-        pertraycapacity: trayCapacity,
       });
       if (result) {
         setSuccess(true);
@@ -76,7 +70,6 @@ export default function AddDryingCrops() {
         setVillage("");
         setCrop("");
         setDuration("");
-        setTrayCapacity("");
       } else {
         setError(true);
       }
@@ -154,7 +147,7 @@ export default function AddDryingCrops() {
         )}
         {village && (
           <TextField
-            label="Duration to dry (in days)"
+            label="Period to dry (in days)"
             type="number"
             inputProps={{ min: 1 }}
             style={{ marginBottom: "1.5rem", width: "80%" }}
@@ -166,26 +159,6 @@ export default function AddDryingCrops() {
             error={duration != "" && duration < 1}
             helperText={
               duration !== "" && duration < 1
-                ? "Please enter a valid capacity"
-                : ""
-            }
-          />
-        )}
-
-        {village && (
-          <TextField
-            label="Tray Capacity (in Kg)"
-            type="number"
-            inputProps={{ min: 0 }}
-            style={{ marginBottom: "1.5rem", width: "80%" }}
-            variant="standard"
-            value={trayCapacity}
-            onChange={(event) => {
-              setTrayCapacity(event.target.value);
-            }}
-            error={trayCapacity !== "" && trayCapacity < 1}
-            helperText={
-              trayCapacity !== "" && trayCapacity < 1
                 ? "Please enter a valid capacity"
                 : ""
             }
@@ -217,7 +190,6 @@ export default function AddDryingCrops() {
                 setEnabled(false);
                 setCrop("");
                 setDuration("");
-                setTrayCapacity("");
               }}
               variant="contained"
               color="error"
