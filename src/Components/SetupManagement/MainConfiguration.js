@@ -1,5 +1,4 @@
 import Card from "@mui/material/Card";
-
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -7,6 +6,7 @@ import { useEffect, useState } from "react";
 import NewConfiguration from "./NewConfiguration";
 import EditConfiguration from "./EditConfiguration";
 import Button from "@mui/material/Button";
+
 export default function MainConfiguration() {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,9 +14,11 @@ export default function MainConfiguration() {
   const [locationId, setLocationId] = useState("");
   const [villageId, setVillageId] = useState("");
   const [globalLoading, setGlobalLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [crops, setCrops] = useState([]);
-
   const [startProcessing, setStartProcessing] = useState(false);
+  const [validator, setValidator] = useState(false);
+
   async function addNewConfiguration() {
     await fetch("http://localhost:3000/api/addNewConfiguration", {
       method: "POST",
@@ -27,14 +29,38 @@ export default function MainConfiguration() {
       headers: {
         "Content-Type": "application/json",
       },
+    }).then((response) => {
+      if (response.ok) {
+        setSuccess(true);
+      }
     });
   }
-  async function getVillageId(id) {
+
+  async function getLocationCrops() {
+    await fetch("http://localhost:3000/api/getLocationCrops")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const docs = data.data;
+        const filteredCrops = docs.filter((item) => {
+          return item.locationid === locationId;
+        });
+        console.log("Actual crops are here");
+
+        setCrops(filteredCrops);
+        setValidator((prev) => {
+          return !prev;
+        });
+      });
+  }
+
+  async function getVillageId(ID) {
     setGlobalLoading(true);
     await fetch("http://localhost:3000/api/getVillageId", {
       method: "POST",
       body: JSON.stringify({
-        locationId: id,
+        locationId: ID,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -45,30 +71,53 @@ export default function MainConfiguration() {
       })
       .then((data) => {
         setVillageId(data.data);
-        console.log("villageId which we got is", villageId, data.data);
+        console.log("villageId which we got is", data.data, villageId);
       });
   }
-  useEffect(() => {
-    setGlobalLoading(true);
-    async function setUp() {
-      await fetch("http://localhost:3000/api/getVillageCrops")
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          setCrops(data.data);
-        });
-    }
-    console.log(villageId);
-    setUp();
-    const filteredCrops = crops.filter((item) => {
-      return item.villageId === villageId;
-    });
-    setCrops(filteredCrops);
 
-    console.log(crops);
-    setGlobalLoading(false);
+  async function getVillageCrops() {
+    await fetch("http://localhost:3000/api/getVillageCrops")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const docs = data.data;
+        console.log("What we obtained?");
+
+        console.log(docs);
+
+        // setCrops((prevCrops) => {
+        //   return prevCrops.filter((item) => {
+        //     return item.villageid == villageId;
+        //   });
+        // });
+        const filteredCrops = docs.filter((item) => {
+          return item.villageid === villageId;
+        });
+
+        console.log(villageId);
+        console.log("what's wrong", villageId);
+
+        console.log(filteredCrops);
+        setCrops(filteredCrops);
+        setValidator((prev) => {
+          return !prev;
+        });
+      });
+  }
+
+  useEffect(() => {
+    if (villageId) {
+      console.log("Village ID bitch is", villageId);
+      getVillageCrops();
+      console.log("wait while we get villagecrops dude");
+    }
   }, [villageId]);
+  useEffect(() => {
+    if (locationId && configured) {
+      getLocationCrops();
+    }
+  }, [locationId]);
   async function getLocations() {
     await fetch("http://localhost:3000/api/getAllAddress")
       .then((response) => {
@@ -79,15 +128,16 @@ export default function MainConfiguration() {
         setLoading(false);
       });
   }
+
   useEffect(() => {
     getLocations();
   }, []);
+
   if (loading && !startProcessing) {
     return (
       <Card
         style={{
           width: "80%",
-
           margin: "0 auto",
           marginTop: "5rem",
           display: "flex",
@@ -96,11 +146,12 @@ export default function MainConfiguration() {
           alignItems: "center",
         }}
       >
-        <CircularProgress></CircularProgress>
+        <CircularProgress />
         <p>Fetching data from the server</p>
       </Card>
     );
   }
+
   if (!loading && !startProcessing) {
     return (
       <div
@@ -129,19 +180,18 @@ export default function MainConfiguration() {
             if (value) {
               setStartProcessing(false);
               console.log(value);
-
               setConfigured(value.configured);
               if (!value.configured) {
                 await getVillageId(value.id);
+                await getVillageCrops();
+              } else {
+                await getLocationCrops(value.id);
               }
-
-              console.log("setting it true t start process");
-
+              console.log(crops.length);
               console.log(loading, configured, startProcessing, locationId);
               console.log(value.id);
               console.log(value.configured);
               setLocationId(value.id);
-
               setStartProcessing(true);
             }
           }}
@@ -149,6 +199,7 @@ export default function MainConfiguration() {
       </div>
     );
   }
+
   if (!loading && configured && startProcessing) {
     return (
       <div
@@ -161,7 +212,14 @@ export default function MainConfiguration() {
           alignItems: "center",
         }}
       >
-        <EditConfiguration locationId={locationId} />
+        <EditConfiguration
+          locationId={locationId}
+          Crops={crops}
+          configured={configured}
+          setAllCrops={setCrops}
+          success={success}
+          validator={validator}
+        />
         <div
           style={{
             display: "flex",
@@ -170,9 +228,11 @@ export default function MainConfiguration() {
             gap: "1rem",
           }}
         >
-          <Button variant="contained" color="primary">
-            Confirm
-          </Button>
+          {!success && (
+            <Button variant="contained" color="primary">
+              Confirm
+            </Button>
+          )}
           <Button
             variant="contained"
             color="success"
@@ -186,6 +246,7 @@ export default function MainConfiguration() {
       </div>
     );
   }
+
   if (!loading && !configured && startProcessing) {
     return (
       <div
@@ -203,6 +264,8 @@ export default function MainConfiguration() {
           Crops={crops}
           configured={configured}
           setAllCrops={setCrops}
+          success={success}
+          validator={validator}
         />
         <div
           style={{

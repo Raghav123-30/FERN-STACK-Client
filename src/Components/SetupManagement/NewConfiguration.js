@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,14 +6,15 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Input from "@mui/material/Input";
-import Paper from "@mui/material/Paper";
+
 import IconButton from "@mui/material/IconButton";
-// Icons
+
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DoneIcon from "@mui/icons-material/DoneAllOutlined";
 import RevertIcon from "@mui/icons-material/NotInterestedOutlined";
 import Card from "@mui/material/Card";
 import { Button } from "@mui/material";
+import SuccessMessage from "../Settings/successOperation";
 
 const useStyles = {
   root: {
@@ -62,13 +63,26 @@ export default function NewConfiguration({
   Crops,
   configured,
   setAllCrops,
+  success,
+  validator,
 }) {
   const initialCrops = Crops.map((crop) => ({
     ...crop,
     perTrayCapacity: "Not Set",
   }));
-
   const [crops, setCrops] = useState(initialCrops);
+  useEffect(() => {
+    if (crops.length == 0) {
+      const initialCrops = Crops.map((crop) => ({
+        ...crop,
+        perTrayCapacity: "Not Set",
+      }));
+      setCrops(initialCrops);
+    }
+
+    console.log("ran it");
+  }, [Crops, validator]);
+
   const [previous, setPrevious] = useState({});
   const classes = useStyles;
 
@@ -116,100 +130,103 @@ export default function NewConfiguration({
     });
     onToggleEditMode(id);
   };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+  if (success) {
+    return <SuccessMessage message="Configuration set successfully" />;
+  } else {
+    return (
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          gap: "2vw",
         }}
       >
-        <p
+        <div
           style={{
-            color: "green",
-            fontWeight: "bold",
-
-            textTransform: "uppercase",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "2vw",
           }}
         >
-          New configuaration
-        </p>
-        <Button variant="contained" color="secondary">
-          Add new crop
-        </Button>
-      </div>
-      <Card
-        style={{
-          margin: "3rem",
-          padding: "2rem",
-        }}
-      >
-        <Table className={classes.table} aria-label="caption table">
-          <TableHead
+          <p
             style={{
-              backgroundColor: "#1976d2",
-              color: "#fff",
+              color: "green",
               fontWeight: "bold",
+
+              textTransform: "uppercase",
             }}
           >
-            <TableRow>
-              <TableCell align="left" />
-              <TableCell align="left">Cropname </TableCell>
-              <TableCell align="left">Mode</TableCell>
-              <TableCell align="left">Period</TableCell>
-              <TableCell align="left">PerTrayCapacity</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {crops.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell className={classes.selectTableCell}>
-                  {row.isEditMode ? (
-                    <>
+            New configuaration
+          </p>
+          <Button variant="contained" color="secondary">
+            Add new crop
+          </Button>
+        </div>
+        <Card
+          style={{
+            margin: "3rem",
+            padding: "2rem",
+          }}
+        >
+          <Table className={classes.table} aria-label="caption table">
+            <TableHead
+              style={{
+                backgroundColor: "#1976d2",
+                color: "#fff",
+                fontWeight: "bold",
+              }}
+            >
+              <TableRow>
+                <TableCell align="left" />
+                <TableCell align="left">Cropname </TableCell>
+                <TableCell align="left">Mode</TableCell>
+                <TableCell align="left">Period</TableCell>
+                <TableCell align="left">PerTrayCapacity</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {crops.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell className={classes.selectTableCell}>
+                    {row.isEditMode ? (
+                      <>
+                        <IconButton
+                          aria-label="done"
+                          onClick={() => onToggleEditMode(row.id)}
+                        >
+                          <DoneIcon />
+                        </IconButton>
+                        <IconButton
+                          aria-label="revert"
+                          onClick={() => onRevert(row.id)}
+                        >
+                          <RevertIcon />
+                        </IconButton>
+                      </>
+                    ) : (
                       <IconButton
-                        aria-label="done"
+                        aria-label="edit"
                         onClick={() => onToggleEditMode(row.id)}
                       >
-                        <DoneIcon />
+                        <EditIcon />
                       </IconButton>
-                      <IconButton
-                        aria-label="revert"
-                        onClick={() => onRevert(row.id)}
-                      >
-                        <RevertIcon />
-                      </IconButton>
-                    </>
-                  ) : (
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() => onToggleEditMode(row.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  )}
-                </TableCell>
-                <CustomTableCell {...{ row, name: "cropname", onChange }} />
-                <CustomTableCell {...{ row, name: "mode", onChange }} />
-                <CustomTableCell {...{ row, name: "period", onChange }} />
-                <CustomTableCell
-                  {...{ row, name: "perTrayCapacity", onChange }}
-                />
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
-    </div>
-  );
+                    )}
+                  </TableCell>
+                  <CustomTableCell {...{ row, name: "cropname", onChange }} />
+                  <CustomTableCell {...{ row, name: "mode", onChange }} />
+                  <CustomTableCell {...{ row, name: "period", onChange }} />
+                  <CustomTableCell
+                    {...{ row, name: "perTrayCapacity", onChange }}
+                  />
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      </div>
+    );
+  }
 }

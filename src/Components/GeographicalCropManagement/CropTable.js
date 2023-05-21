@@ -148,9 +148,6 @@ export default function CropTable() {
                     </TableCell>
                     <TableCell style={{ fontWeight: "bold" }}>mode</TableCell>
                     <TableCell style={{ fontWeight: "bold" }}>period</TableCell>
-                    <TableCell style={{ fontWeight: "bold" }}>
-                      pertraycapacity
-                    </TableCell>
 
                     <TableCell style={{ fontWeight: "bold" }} align="right">
                       Actions
@@ -169,14 +166,11 @@ export default function CropTable() {
                       <TableCell component="th" scope="row">
                         {item.period}
                       </TableCell>
-                      <TableCell component="th" scope="row">
-                        {item.pertraycapacity}
-                      </TableCell>
 
                       <TableCell align="right">
-                        <IconButton onClick={() => {}}>
+                        {/* <IconButton onClick={() => {}}>
                           <ModeEditOutlineIcon></ModeEditOutlineIcon>
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton onClick={() => {}}>
                           <DeleteIcon />
                         </IconButton>
