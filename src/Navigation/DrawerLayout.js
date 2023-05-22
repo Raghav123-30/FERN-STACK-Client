@@ -153,7 +153,7 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <AddBusinessIcon></AddBusinessIcon>
               </ListItemIcon>
-              <ListItemText primary="Add Owner" />
+              <ListItemText primary="Add Setup" />
             </ListItemButton>
           </ListItem>
           <ListItem
@@ -219,52 +219,13 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <PublicIcon></PublicIcon>
               </ListItemIcon>
-              <ListItemText primary="Geography data" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            onClick={() => {
-              navigate("/addcrop");
-            }}
-            disablePadding
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <AgricultureIcon></AgricultureIcon>
-              </ListItemIcon>
-              <ListItemText primary="Add Crop" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            onClick={() => {
-              navigate("/listcrop");
-            }}
-            disablePadding
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <ListIcon></ListIcon>
-              </ListItemIcon>
-              <ListItemText primary="List Crops" />
+              <ListItemText primary="Geography settings" />
             </ListItemButton>
           </ListItem>
         </List>
         <Divider />
 
         <List>
-          <ListItem
-            disablePadding
-            onClick={() => {
-              navigate("/settings");
-            }}
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <SettingsIcon></SettingsIcon>
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItemButton>
-          </ListItem>
           <ListItem
             disablePadding
             onClick={() => {

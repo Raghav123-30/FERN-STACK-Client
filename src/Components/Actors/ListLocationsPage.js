@@ -9,6 +9,7 @@ import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useModal } from "../../Contexts/ModalContext";
+import XLSX from "xlsx";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
@@ -19,6 +20,17 @@ import LocationEditModal from "./List-location-edit-modal";
 import Confirmation from "./confirmationHandlers/Confirmation";
 import SuccessMessage from "../Settings/successOperation";
 export default function ListLocatiosPage() {
+  const DownloadSheet = () => {
+    const workSheet = XLSX.utils.json_to_sheet(data);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, "owners");
+    //Buffer
+    let buf = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+    //Binary string
+    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+    //Download
+    XLSX.writeFile(workBook, "ownerData.xlsx");
+  };
   const {
     otpModal,
     setOtpModal,
@@ -124,7 +136,7 @@ export default function ListLocatiosPage() {
         <TableContainer component={Paper}>
           <IconButton
             style={{ margin: "1rem", float: "right" }}
-            onClick={() => console.log("Download button clicked")}
+            onClick={DownloadSheet}
           >
             <DownloadIcon />
           </IconButton>
