@@ -18,22 +18,44 @@ export default function MainConfiguration() {
   const [crops, setCrops] = useState([]);
   const [startProcessing, setStartProcessing] = useState(false);
   const [validator, setValidator] = useState(false);
+  const [message, setMessage] = useState();
 
   async function addNewConfiguration() {
-    await fetch("http://localhost:3000/api/addNewConfiguration", {
-      method: "POST",
-      body: JSON.stringify({
-        crops: crops,
-        locationId: locationId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        setSuccess(true);
-      }
-    });
+    console.log("Hello, hello");
+    if (!configured) {
+      await fetch("http://localhost:3000/api/addNewConfiguration", {
+        method: "POST",
+        body: JSON.stringify({
+          crops: crops,
+          locationId: locationId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Crops in the setup configured successfully");
+          setSuccess(true);
+        }
+      });
+    } else {
+      console.log("Configured so edited successfully");
+      await fetch("http://localhost:3000/api/updateConfiguration", {
+        method: "POST",
+        body: JSON.stringify({
+          crops: crops,
+          locationId: locationId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("Crops in the setup edited successfully");
+          setSuccess(true);
+        }
+      });
+    }
   }
 
   async function getLocationCrops() {
@@ -94,7 +116,8 @@ export default function MainConfiguration() {
         const filteredCrops = docs.filter((item) => {
           return item.villageid === villageId;
         });
-
+        console.log(filteredCrops);
+        console.log("One of the filtered crop", filteredCrops[0]);
         console.log(villageId);
         console.log("what's wrong", villageId);
 
@@ -107,11 +130,13 @@ export default function MainConfiguration() {
   }
 
   useEffect(() => {
-    if (villageId) {
-      console.log("Village ID bitch is", villageId);
-      getVillageCrops();
-      console.log("wait while we get villagecrops dude");
+    async function fetchCrops() {
+      if (villageId && crops.length == 0) {
+        await getVillageCrops();
+        console.log("wait while we get villagecrops dude");
+      }
     }
+    fetchCrops();
   }, [villageId]);
   useEffect(() => {
     if (locationId && configured) {
@@ -183,9 +208,6 @@ export default function MainConfiguration() {
               setConfigured(value.configured);
               if (!value.configured) {
                 await getVillageId(value.id);
-                await getVillageCrops();
-              } else {
-                await getLocationCrops(value.id);
               }
               console.log(crops.length);
               console.log(loading, configured, startProcessing, locationId);
@@ -219,6 +241,9 @@ export default function MainConfiguration() {
           setAllCrops={setCrops}
           success={success}
           validator={validator}
+          setSuccess={setSuccess}
+          message={message}
+          setMessage={setMessage}
         />
         <div
           style={{
@@ -229,7 +254,11 @@ export default function MainConfiguration() {
           }}
         >
           {!success && (
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addNewConfiguration}
+            >
               Confirm
             </Button>
           )}
@@ -238,6 +267,7 @@ export default function MainConfiguration() {
             color="success"
             onClick={() => {
               setStartProcessing(false);
+              window.location.reload();
             }}
           >
             Back
@@ -266,6 +296,8 @@ export default function MainConfiguration() {
           setAllCrops={setCrops}
           success={success}
           validator={validator}
+          message={message}
+          setMessage={setMessage}
         />
         <div
           style={{
@@ -287,6 +319,7 @@ export default function MainConfiguration() {
             color="success"
             onClick={() => {
               setStartProcessing(false);
+              window.location.reload();
             }}
           >
             Back

@@ -65,6 +65,8 @@ export default function NewConfiguration({
   setAllCrops,
   success,
   validator,
+  message,
+  setMessage,
 }) {
   const initialCrops = Crops.map((crop) => ({
     ...crop,
@@ -81,7 +83,7 @@ export default function NewConfiguration({
     }
 
     console.log("ran it");
-  }, [Crops, validator]);
+  }, [Crops, validator, villageId]);
 
   const [previous, setPrevious] = useState({});
   const classes = useStyles;
@@ -131,7 +133,7 @@ export default function NewConfiguration({
     onToggleEditMode(id);
   };
   if (success) {
-    return <SuccessMessage message="Configuration set successfully" />;
+    return <SuccessMessage message={message} />;
   } else {
     return (
       <div
@@ -161,9 +163,6 @@ export default function NewConfiguration({
           >
             New configuaration
           </p>
-          <Button variant="contained" color="secondary">
-            Add new crop
-          </Button>
         </div>
         <Card
           style={{

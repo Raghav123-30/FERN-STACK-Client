@@ -15,6 +15,7 @@ import RevertIcon from "@mui/icons-material/NotInterestedOutlined";
 import Card from "@mui/material/Card";
 import { Button } from "@mui/material";
 import SuccessMessage from "../Settings/successOperation";
+import AddNewCropModal from "./AddNewCropModal";
 
 const useStyles = {
   root: {
@@ -65,9 +66,14 @@ export default function EditConfiguration({
   setAllCrops,
   success,
   validator,
+  setSuccess,
+  message,
+  setMessage,
 }) {
+  const [open, setOpen] = useState(false);
   const [crops, setCrops] = useState(Crops);
   const [previous, setPrevious] = useState({});
+
   const classes = useStyles;
 
   useEffect(() => {
@@ -120,7 +126,7 @@ export default function EditConfiguration({
     onToggleEditMode(id);
   };
   if (success) {
-    return <SuccessMessage message="Configuration set successfully" />;
+    return <SuccessMessage message={message} />;
   } else {
     return (
       <div
@@ -150,7 +156,13 @@ export default function EditConfiguration({
           >
             Edit configuaration
           </p>
-          <Button variant="contained" color="secondary">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
             Add new crop
           </Button>
         </div>
@@ -215,6 +227,15 @@ export default function EditConfiguration({
             </TableBody>
           </Table>
         </Card>
+        <AddNewCropModal
+          open={open}
+          setOpen={setOpen}
+          locationId={locationId}
+          success={success}
+          message={message}
+          setSuccess={setSuccess}
+          setMessage={setMessage}
+        />
       </div>
     );
   }
