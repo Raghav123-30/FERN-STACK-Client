@@ -3,12 +3,43 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LocationPicker from "../UI/LocationPicker";
 import OrdersTable from "./FarmerOrders";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function HomePage() {
   const [location, setLocation] = useState();
   const [numTrays, setnumTrays] = useState();
   const [locationId, setLocationId] = useState();
+  const [productName, setProductName] = useState();
+  const [rack, setRacks] = useState();
+  const [layers, setLayers] = useState();
+  const [orderData, setorderData] = useState();
+  useEffect(() => {
+    console.log("location ID now is ", locationId);
+    async function fetchSetupDetails() {
+      if (locationId) {
+        await fetch("http://localhost:3000/api/fetchSetupDetails", {
+          method: "POST",
+          body: JSON.stringify({
+            locationId: locationId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            const details = data.data;
+            setProductName(details.productName);
+            setRacks(details.rack);
+            setnumTrays(details.trays);
+            setLayers(details.layers);
+          });
+      }
+    }
+    fetchSetupDetails();
+  }, [locationId]);
   return (
     <>
       <div
@@ -35,7 +66,6 @@ export default function HomePage() {
           <LocationPicker
             location={location}
             setLocation={setLocation}
-            setnumTrays={setnumTrays}
             setLocationId={setLocationId}
           ></LocationPicker>
         </Card>
@@ -65,7 +95,7 @@ export default function HomePage() {
         )}
         {numTrays && (
           <Card style={{ width: "40vw", padding: "2rem" }}>
-            <OrdersTable></OrdersTable>
+            <OrdersTable locationId={locationId}></OrdersTable>
           </Card>
         )}
       </div>
@@ -109,7 +139,8 @@ export default function HomePage() {
               textTransform: "uppercase",
             }}
           >
-            Currently there are no active orders in this location
+            ProductName: {productName}, Total number of trays:{numTrays}, Number
+            of racks:{rack}, Number of layers:{layers}
           </p>
           <Grid container spacing={0.5}>
             {Array.from(Array(numTrays), (e, i) => (
@@ -118,8 +149,8 @@ export default function HomePage() {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    color: "white",
-                    backgroundColor: "#F2AA4C", // set your background color here
+                    color: "black",
+                    backgroundColor: "#f7fee7", // set your background color here
                     margin: "0 0.25rem",
                     display: "flex",
                     alignItems: "center",

@@ -13,7 +13,25 @@ import { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 
-export default function OrdersTable() {
+export default function OrdersTable({ locationId, orderData, setOrderData }) {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function fetchOrders() {
+      if (locationId) {
+        setLoading(true);
+        await fetch("http://localhost:3000/api/getOrders", {
+          method: "POST",
+          body: JSON.stringify({
+            locationId: locationId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+    }
+    fetchOrders();
+  }, [locationId]);
   const [rows, setRows] = useState([
     {
       fullName: "Sandeep Kumar",
