@@ -12,7 +12,8 @@ export default function HomePage() {
   const [productName, setProductName] = useState();
   const [rack, setRacks] = useState();
   const [layers, setLayers] = useState();
-  const [orderData, setorderData] = useState();
+  const [orderData, setorderData] = useState([]);
+  const [trayAllocationArray, setTrayAllocationArray] = useState([]);
   useEffect(() => {
     console.log("location ID now is ", locationId);
     async function fetchSetupDetails() {
@@ -95,7 +96,11 @@ export default function HomePage() {
         )}
         {numTrays && (
           <Card style={{ width: "40vw", padding: "2rem" }}>
-            <OrdersTable locationId={locationId}></OrdersTable>
+            <OrdersTable
+              locationId={locationId}
+              orderData={orderData}
+              setOrderData={setorderData}
+            ></OrdersTable>
           </Card>
         )}
       </div>
@@ -143,28 +148,37 @@ export default function HomePage() {
             of racks:{rack}, Number of layers:{layers}
           </p>
           <Grid container spacing={0.5}>
-            {Array.from(Array(numTrays), (e, i) => (
-              <Grid item xs={3} sm={2} md={1} key={i}>
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    color: "black",
-                    backgroundColor: "#f7fee7", // set your background color here
-                    margin: "0 0.25rem",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.25rem",
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1rem",
-                  }}
-                >
-                  {i + 1}
-                </Box>
-              </Grid>
-            ))}
+            {Array.from(Array(numTrays), (e, i) => {
+              const trayIndex = i + 1;
+              const tray = orderData.find((item) =>
+                item.trayallocation.includes(trayIndex.toString())
+              );
+
+              const backgroundColor = tray ? tray.colorcode : "#fff";
+
+              return (
+                <Grid item xs={3} sm={2} md={1} key={i}>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      color: "black",
+                      backgroundColor: backgroundColor,
+                      margin: "0 0.25rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.25rem",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1rem",
+                    }}
+                  >
+                    {trayIndex}
+                  </Box>
+                </Grid>
+              );
+            })}
           </Grid>
         </Card>
       )}

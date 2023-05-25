@@ -15,7 +15,26 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 
 export default function OrdersTable({ locationId, orderData, setOrderData }) {
   const [loading, setLoading] = useState(false);
+  const getDate = (timestamp) => {
+    const seconds = timestamp.seconds;
+    const milliseconds =
+      seconds * 1000 + Math.floor(timestamp.nanoseconds / 1e6);
+    const date = new Date(milliseconds);
+
+    // Get the day, month, and year components from the date
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+    const year = date.getFullYear();
+
+    // Format the components as "DD/MM/yyyy"
+    const formattedDate = `${day.toString().padStart(2, "0")}/${month
+      .toString()
+      .padStart(2, "0")}/${year}`;
+
+    return formattedDate;
+  };
   useEffect(() => {
+    console.log("now sending the request");
     async function fetchOrders() {
       if (locationId) {
         setLoading(true);
@@ -27,7 +46,14 @@ export default function OrdersTable({ locationId, orderData, setOrderData }) {
           headers: {
             "Content-Type": "application/json",
           },
-        });
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(orderData);
+            setOrderData(data.data);
+          });
       }
     }
     fetchOrders();
@@ -88,22 +114,22 @@ export default function OrdersTable({ locationId, orderData, setOrderData }) {
             <TableCell>Full Name</TableCell>
             <TableCell>Phone Number</TableCell>
             <TableCell>Crop</TableCell>
-            <TableCell>Weight</TableCell>
-            <TableCell>Price</TableCell>
+            <TableCell>Colorcode</TableCell>
+            <TableCell>Number of trays</TableCell>
             <TableCell>Arrival Date</TableCell>
             <TableCell>Dispatch Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell>{row.fullName}</TableCell>
-              <TableCell>{row.phoneNumber}</TableCell>
-              <TableCell>{row.crop}</TableCell>
-              <TableCell>{row.weight}</TableCell>
-              <TableCell>{row.price}</TableCell>
-              <TableCell>{row.arrivalDate}</TableCell>
-              <TableCell>{row.dispatchDate}</TableCell>
+          {orderData.map((row) => (
+            <TableRow key={orderData.phoneNumber}>
+              <TableCell>{row.farmername}</TableCell>
+              <TableCell>{row.farmerphone}</TableCell>
+              <TableCell>{row.selectedcrop}</TableCell>
+              <TableCell>{row.colorcode}</TableCell>
+              <TableCell>{row.totalnumberoftrays}</TableCell>
+              <TableCell>{getDate(row.dateofarrival)}</TableCell>
+              <TableCell>{getDate(row.dateofdispatch)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
