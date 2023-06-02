@@ -41,6 +41,14 @@ export function ModalProvider({ children }) {
   const [role, setRole] = useState("");
   const [action, setAction] = useState("");
   const [isDeletionEnabled, setIsDeletionEnabled] = useState(false);
+  const [section, setSection] = useState("");
+  const [productName, setProductName] = useState("");
+  const [rack, setRack] = useState("");
+  const [productNameError, setProductNameError] = useState("");
+  const [rackError, setRackError] = useState("");
+  const [sectionError, setSectionError] = useState("");
+  const [tray, setTray] = useState("");
+  const [trayError, setTrayError] = useState("");
 
   const editModalCloser = () => {
     setIsEditModalOpen(false);
@@ -120,6 +128,23 @@ export function ModalProvider({ children }) {
     setAction,
     isDeletionEnabled,
     setIsDeletionEnabled,
+
+    productName,
+    setProductName,
+    rack,
+    setRack,
+    section,
+    setSection,
+    tray,
+    setTray,
+    productNameError,
+    setProductNameError,
+    rackError,
+    setRackError,
+    sectionError,
+    setSectionError,
+    trayError,
+    setTrayError,
   };
 
   return (

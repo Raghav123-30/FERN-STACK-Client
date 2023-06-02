@@ -44,18 +44,21 @@ export default function Confirmation(props) {
     setSuccessfulOperation,
     setMessage,
     crop,
-
     serviceCharge,
-
     mode,
-
     trayCapacity,
-
     duration,
-
     role,
     action,
     setIsDeletionEnabled,
+    productName,
+    setProductName,
+    rack,
+    setRack,
+    section,
+    setSection,
+    tray,
+    setTray,
   } = useModal();
 
   function handler() {
@@ -179,6 +182,47 @@ export default function Confirmation(props) {
       }).then((response) => {
         if (response.ok) {
           setMessage("operator deleted successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "A3S Product" && action == "edit") {
+      fetch("http://localhost:3000/api/updateproduct", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+          productName: productName,
+          rack: rack,
+          section: section,
+          tray: tray,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("A3S Product edited successfully");
+          setSuccessfulOperation(true);
+          console.log("success");
+        } else if (!response.ok) {
+          console.log("Failed");
+        }
+      });
+    } else if (role == "A3S Product" && action == "delete") {
+      console.log("Hi bro");
+      fetch("http://localhost:3000/api/deleteproduct", {
+        method: "POST",
+        body: JSON.stringify({
+          id: documentId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("A3S Product deleted successfully");
           setSuccessfulOperation(true);
           console.log("success");
         } else if (!response.ok) {
