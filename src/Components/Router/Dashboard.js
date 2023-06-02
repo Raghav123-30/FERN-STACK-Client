@@ -2,7 +2,8 @@ import PersistentDrawerLeft from "../../Navigation/DrawerLayout";
 import AddActorPage from "../Actors/AddActorPage";
 import ListOperatorsPage from "../Actors/ListOperatorsPage";
 import ListLocationsPage from "../Actors/ListLocationsPage";
-
+import AddProductPage from "../Actors/add-ProductPage";
+import ListProductsPage from "../Actors/ListProductsPage";
 import LandingPage from "../Landing/Landing";
 import HomePage from "../Home/HomePage";
 
@@ -78,6 +79,16 @@ export default function Dashboard() {
             path="/listop"
             exact
             element={<ListOperatorsPage></ListOperatorsPage>}
+          ></Route>
+          <Route
+            path="/addproduct"
+            exact
+            element={<AddProductPage></AddProductPage>}
+          ></Route>
+          <Route
+            path="/listproduct"
+            exact
+            element={<ListProductsPage></ListProductsPage>}
           ></Route>
           <Route
             path="/listloc"

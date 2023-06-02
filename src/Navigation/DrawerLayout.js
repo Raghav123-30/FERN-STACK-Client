@@ -25,6 +25,7 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { useNavigate } from "react-router-dom";
 import AgricultureIcon from "@mui/icons-material/Agriculture";
+
 import PublicIcon from "@mui/icons-material/Public";
 const drawerWidth = 240;
 
@@ -140,6 +141,32 @@ export default function PersistentDrawerLeft() {
                 <HomeRoundedIcon></HomeRoundedIcon>
               </ListItemIcon>
               <ListItemText primary="Home" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/addproduct");
+            }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <AgricultureIcon></AgricultureIcon>
+              </ListItemIcon>
+              <ListItemText primary="Add Product" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/listproduct");
+            }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <ListIcon></ListIcon>
+              </ListItemIcon>
+              <ListItemText primary="List Product" />
             </ListItemButton>
           </ListItem>
 

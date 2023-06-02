@@ -12,8 +12,20 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import XLSX from "xlsx";
 
 export default function OrdersTable({ locationId, orderData, setOrderData }) {
+  const DownloadSheet = () => {
+    const workSheet = XLSX.utils.json_to_sheet(orderData);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, "orders");
+    //Buffer
+    let buf = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+    //Binary string
+    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+    //Download
+    XLSX.writeFile(workBook, "orders.xlsx");
+  };
   const [loading, setLoading] = useState(false);
   const getDate = (timestamp) => {
     const seconds = timestamp.seconds;
@@ -98,7 +110,7 @@ export default function OrdersTable({ locationId, orderData, setOrderData }) {
     <TableContainer component={Paper}>
       <IconButton
         style={{ margin: "1rem", float: "right" }}
-        onClick={() => console.log("Download button clicked")}
+        onClick={DownloadSheet}
       >
         <DownloadIcon />
       </IconButton>

@@ -9,19 +9,23 @@ import { auth } from "../../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import OtpModalFragment from "../OtpActivity/OtpModal";
 import LocationPicker from "../UI/LocationPicker";
+import ProductPicker from "../UI/ProductPicker";
 import DoneIcon from "@mui/icons-material/Done";
 import ServerIsBusy from "../UI/ServerBusy";
-
+import GeographyPicker from "../UI/GeographyPicker";
+import VillagePicker from "../UI/VillagePicker";
 export default function AddActorPage(props) {
   const role = props.actor;
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [adhar, setAdhar] = useState("");
+  const [homeAddress, setHomeAddress] = useState("");
   const [fullNameError, setFullNameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [adharError, setAdharError] = useState(false);
+  const [homeAddressError, setHomeAddressError] = useState(false);
   const [formIsValid, setFormIsValid] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
   const [otp, setotp] = useState("");
@@ -32,6 +36,14 @@ export default function AddActorPage(props) {
   const [verified, setverified] = useState(false);
   const [serverState, setServerState] = useState(true);
   const [locationId, setLocationId] = useState("");
+  const [product, setProduct] = useState("");
+  const [productId, setProductId] = useState("");
+  const [geography, setGeography] = useState("");
+  const [geographyId, setGeographyId] = useState("");
+  const [village, setVillage] = useState("");
+  const [villageId, setVillageId] = useState("");
+  const [configured, setConfigured] = useState(false);
+
   const currentActor = new Actor(fullName, phone, address, adhar, location);
 
   async function renderOtpVerification() {
@@ -61,7 +73,7 @@ export default function AddActorPage(props) {
           "Too many OTP requested for the same phone number! please try again after some time"
         );
         setOtpModal(false);
-        console.log("You are fucked up");
+        console.log("Failed");
       });
   }
 
@@ -69,29 +81,35 @@ export default function AddActorPage(props) {
     try {
       await confirmFunction.confirm(otp);
       console.log("OTP verified successfully");
-      let submitObject = new submitToFirestore({
-        fullName: fullName,
-        phone: phone,
-        address: address,
-        adhar: adhar,
-        location: location,
-        locationId: locationId,
-      });
-      console.log(submitObject);
+      if (role == "operator") {
+        let submitObject = new submitToFirestore({
+          fullName: fullName,
+          phone: phone,
+          address: address,
+          adhar: adhar,
+          location: location,
+          locationId: locationId,
+        });
+        console.log(submitObject);
+        submitObject.submit();
+      }
+
       if (role == "owner") {
         let submitObject = new submitToFirestore({
           fullName: fullName,
           phone: phone,
           address: address,
           adhar: adhar,
+          homeAddress: homeAddress,
+          productId: productId,
+          geographyId: geographyId,
+          villageId: villageId,
+          configured: configured,
         });
+        console.log(submitObject);
+        submitObject.submit();
       }
-      console.log(submitObject);
-
-      submitObject.submit();
-
       setverified(true);
-
       return true;
     } catch (error) {
       if (error.code === "auth/invalid-verification-code") {
@@ -136,7 +154,7 @@ export default function AddActorPage(props) {
     return (
       <Card className={`${classes.card}`}>
         <TextField
-          label="Fullname"
+          label="Owner Name"
           style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={fullName}
@@ -151,7 +169,7 @@ export default function AddActorPage(props) {
           helperText={fullNameError ? "Please enter valid name" : ""}
         ></TextField>
         <TextField
-          label="Phonenumber"
+          label="Phone Number"
           style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={phone}
@@ -166,9 +184,7 @@ export default function AddActorPage(props) {
           helperText={phoneError ? "Please enter valid phone number" : ""}
         ></TextField>
         <TextField
-          label="Address"
-          multiline
-          rows={5}
+          label="Location"
           style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={address}
@@ -191,8 +207,39 @@ export default function AddActorPage(props) {
             setLocationId={setLocationId}
           />
         )}
+        {role == "owner" && (
+          <ProductPicker
+            product={product}
+            setProduct={setProduct}
+            serverState={serverState}
+            setServerState={setServerState}
+            setProductId={setProductId}
+          />
+        )}
+
+        {role == "owner" && (
+          <GeographyPicker
+            geography={geography}
+            setGeography={setGeography}
+            serverState={serverState}
+            setServerState={setServerState}
+            setGeographyId={setGeographyId}
+          />
+        )}
+
+        {role == "owner" && (
+          <VillagePicker
+            village={village}
+            setVillage={setVillage}
+            serverState={serverState}
+            setServerState={setServerState}
+            setVillageId={setVillageId}
+            geographyId={geographyId}
+          />
+        )}
+
         <TextField
-          label="Adharnumber"
+          label="Adhar Number"
           style={{ marginBottom: "1.5rem", width: "90%" }}
           variant="standard"
           value={adhar}
@@ -206,13 +253,28 @@ export default function AddActorPage(props) {
           error={adharError}
           helperText={adharError ? "Please enter valid Adhar number" : ""}
         ></TextField>
+        <TextField
+          label="Home Address"
+          style={{ marginBottom: "1.5rem", width: "90%" }}
+          variant="standard"
+          value={homeAddress}
+          onChange={(event) => {
+            setHomeAddress(event.target.value);
+            currentActor.homeAddress = event.target.value;
+            if (homeAddressError) {
+              setHomeAddressError(false);
+            }
+          }}
+          error={homeAddressError}
+          helperText={homeAddressError ? "Please enter valid home address" : ""}
+        ></TextField>
         <Button
           variant="contained"
           color="success"
           style={{ display: "block", margin: "0 auto", width: "50%" }}
           onClick={submitHandler}
         >
-          submit
+          Submit
         </Button>
         <div id="recaptcha-container"></div>
 
