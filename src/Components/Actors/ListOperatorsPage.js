@@ -155,100 +155,108 @@ export default function ListOperatorsPage() {
 
   if (available && data.length && !successfulOperation) {
     return (
-      <Card
-        style={{
-          width: "90vw",
-          maxWidth: "800px",
-          margin: "0 auto",
-          marginTop: "5rem",
-          padding: "1rem",
-          boxSizing: "border-box",
-        }}
-      >
-        <TableContainer component={Paper}>
-          <IconButton
-            style={{ margin: "1rem", float: "right" }}
-            onClick={DownloadSheet}
-          >
-            <DownloadIcon />
-          </IconButton>
-          <Table aria-label="simple table">
-            <TableHead
-              style={{
-                backgroundColor: "#1976d2",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
+      <div data-testid="list-operators">
+        <Card
+          style={{
+            width: "90vw",
+            maxWidth: "800px",
+            margin: "0 auto",
+            marginTop: "5rem",
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+        >
+          <TableContainer component={Paper}>
+            <IconButton
+              style={{ margin: "1rem", float: "right" }}
+              onClick={DownloadSheet}
             >
-              <TableRow>
-                <TableCell style={{ fontWeight: "bold" }}>Full Name</TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Phone Number
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Address
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  A3S Location
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Adhar Number
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((item) => (
-                <TableRow key={item.fullName}>
-                  <TableCell component="th" scope="row">
-                    {item.fullName}
+              <DownloadIcon />
+            </IconButton>
+            <Table aria-label="simple table">
+              <TableHead
+                style={{
+                  backgroundColor: "#1976d2",
+                  color: "#fff",
+                  fontWeight: "bold",
+                }}
+              >
+                <TableRow>
+                  <TableCell style={{ fontWeight: "bold" }}>
+                    Full Name
                   </TableCell>
-                  <TableCell align="right">{item.phone}</TableCell>
-                  <TableCell align="right">{item.address}</TableCell>
-                  <TableCell align="right">{item.location}</TableCell>
-                  <TableCell align="right">
-                    {item.adharNumber || "N/A"}
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Phone Number
                   </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setFullName(item.fullName);
-                        setAddress(item.address);
-                        setAdhar(item.adharNumber);
-                        setLocation(item.location);
-                        setPhone(item.phone);
-                        setNewPhone(item.phone);
-                        setRole("operator");
-                        setAction("edit");
-                        setDocumentId(item.id);
-                        setIsEditModalOpen(true);
-                      }}
-                    >
-                      <ModeEditOutlineIcon></ModeEditOutlineIcon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        setDocumentId(item.id);
-                        setRole("operator");
-                        setAction("delete");
-                        setIsDeletionEnabled(true);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Address
+                  </TableCell>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    A3S Location
+                  </TableCell>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Adhar Number
+                  </TableCell>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Actions
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <OperatorEditFragment></OperatorEditFragment>
-        {isDeletionEnabled && <Confirmation></Confirmation>}
-      </Card>
+              </TableHead>
+              <TableBody>
+                {data.map((item) => (
+                  <TableRow key={item.fullName}>
+                    <TableCell component="th" scope="row">
+                      {item.fullName}
+                    </TableCell>
+                    <TableCell align="right">{item.phone}</TableCell>
+                    <TableCell align="right">{item.address}</TableCell>
+                    <TableCell align="right">{item.location}</TableCell>
+                    <TableCell align="right">
+                      {item.adharNumber || "N/A"}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          setFullName(item.fullName);
+                          setAddress(item.address);
+                          setAdhar(item.adharNumber);
+                          setLocation(item.location);
+                          setPhone(item.phone);
+                          setNewPhone(item.phone);
+                          setRole("operator");
+                          setAction("edit");
+                          setDocumentId(item.id);
+                          setIsEditModalOpen(true);
+                        }}
+                      >
+                        <ModeEditOutlineIcon></ModeEditOutlineIcon>
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          setDocumentId(item.id);
+                          setRole("operator");
+                          setAction("delete");
+                          setIsDeletionEnabled(true);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <OperatorEditFragment></OperatorEditFragment>
+          {isDeletionEnabled && <Confirmation></Confirmation>}
+        </Card>
+      </div>
     );
   } else if (available && successfulOperation) {
-    return <SuccessMessage message={message}></SuccessMessage>;
+    return (
+      <div data-testid="list-operators">
+        <SuccessMessage message={message}></SuccessMessage>
+      </div>
+    );
   }
 }

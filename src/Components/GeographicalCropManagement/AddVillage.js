@@ -1,11 +1,11 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-
 import Card from "@mui/material/Card";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { useState, useEffect } from "react";
+
 export default function AddVillage() {
   const [enabled, setEnabled] = useState(false);
   const [taluk, setTaluk] = useState("");
@@ -16,6 +16,7 @@ export default function AddVillage() {
   const [geographyId, setGeographyID] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
   async function getGeographies() {
     await fetch("http://localhost:3000/api/getAllGeography")
       .then((response) => {
@@ -26,9 +27,11 @@ export default function AddVillage() {
         setLoading(false);
       });
   }
+
   useEffect(() => {
     getGeographies();
   }, []);
+
   async function enableHandler() {
     await getGeographies();
     setEnabled(true);
@@ -65,6 +68,7 @@ export default function AddVillage() {
         });
     }
   }
+
   if (enabled && success) {
     return (
       <div
@@ -75,6 +79,7 @@ export default function AddVillage() {
           gap: "0.5vw",
           alignItems: "center",
         }}
+        data-testid="add-village"
       >
         <p
           style={{
@@ -96,32 +101,39 @@ export default function AddVillage() {
       </div>
     );
   }
+
   if (!enabled && loading) {
     return (
       <Card
         style={{
           width: "80%",
-
           margin: "0 auto",
-
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
         }}
+        data-testid="add-village"
       >
-        <CircularProgress></CircularProgress>
+        <CircularProgress />
         <p>Fetching data from the server</p>
       </Card>
     );
   }
+
   if (!enabled) {
     return (
-      <Button onClick={enableHandler} variant="contained" color="info">
+      <Button
+        onClick={enableHandler}
+        variant="contained"
+        color="info"
+        data-testid="add-village"
+      >
         Add new village
       </Button>
     );
   }
+
   if (enabled) {
     return (
       <div
@@ -132,6 +144,7 @@ export default function AddVillage() {
           gap: "0.5vw",
           alignItems: "center",
         }}
+        data-testid="add-village"
       >
         <Autocomplete
           style={{ width: "150%", marginBottom: "1.5vh" }}
@@ -154,6 +167,7 @@ export default function AddVillage() {
             }
           }}
         />
+
         {currentGeography && (
           <TextField
             style={{ width: "100%", marginBottom: "0.7vh" }}
@@ -163,21 +177,30 @@ export default function AddVillage() {
             onChange={(e) => {
               setTaluk(e.target.value);
             }}
-          ></TextField>
+            data-testid="taluk-input"
+          />
         )}
+
         {currentGeography && (
           <TextField
-            style={{ width: "100%", arginBottom: "0.7vh" }}
+            style={{ width: "100%", marginBottom: "0.7vh" }}
             label="Village"
             placeholder="Eg.Annigeri"
             value={village}
             onChange={(e) => {
               setVillage(e.target.value);
             }}
-          ></TextField>
+            data-testid="village-input"
+          />
         )}
+
         {currentGeography && (
-          <Button onClick={submitHandler} variant="contained" color="secondary">
+          <Button
+            onClick={submitHandler}
+            variant="contained"
+            color="secondary"
+            data-testid="submit-button"
+          >
             Submit
           </Button>
         )}

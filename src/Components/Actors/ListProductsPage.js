@@ -73,9 +73,8 @@ export default function ListProductsPage() {
     setDelModalVisible(false);
   };
   useEffect(() => {
-    async function getData() 
-    {
-      await fetch("http://localhost:3000/api/listproduct",{
+    async function getData() {
+      await fetch("http://localhost:3000/api/listproduct", {
         method: "GET",
       })
         .then((response) => {
@@ -119,6 +118,7 @@ export default function ListProductsPage() {
   if (!available) {
     return (
       <Card
+        data-testid="list-products"
         style={{
           width: "90vw",
           maxWidth: "800px",
@@ -140,6 +140,7 @@ export default function ListProductsPage() {
   if (available && data.length && !successfulOperation) {
     return (
       <Card
+        data-testid="list-products"
         style={{
           width: "90vw",
           maxWidth: "800px",
@@ -165,12 +166,14 @@ export default function ListProductsPage() {
               }}
             >
               <TableRow>
-                <TableCell style={{ fontWeight: "bold" }}>Product Name</TableCell>
-                <TableCell style={{ fontWeight: "bold" }} align="right">
-                 No of Racks
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Product Name
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
-                 No of Sections
+                  No of Racks
+                </TableCell>
+                <TableCell style={{ fontWeight: "bold" }} align="right">
+                  No of Sections
                 </TableCell>
                 <TableCell style={{ fontWeight: "bold" }} align="right">
                   No of Trays
@@ -225,6 +228,10 @@ export default function ListProductsPage() {
       </Card>
     );
   } else if (available && successfulOperation) {
-    return <SuccessMessage message={message}></SuccessMessage>;
+    return (
+      <div data-testid="list-products">
+        <SuccessMessage message={message}></SuccessMessage>;
+      </div>
+    );
   }
 }

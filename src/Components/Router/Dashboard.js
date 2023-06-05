@@ -47,6 +47,7 @@ export default function Dashboard() {
   if (Loading && !isLoggedIn) {
     return (
       <div
+        data-testid="dashboard"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -61,7 +62,7 @@ export default function Dashboard() {
     );
   } else if (isLoggedIn && !Loading) {
     return (
-      <div className="App">
+      <div className="App" data-testid="list-operators">
         <PersistentDrawerLeft />
         <Routes>
           <Route path="/" exact element={<HomePage></HomePage>}></Route>

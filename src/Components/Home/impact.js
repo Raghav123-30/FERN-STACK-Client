@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import CountUp from "react-countup";
 export default function ImpactPage() {
   return (
-    <>
+    <div data-testid="impact-page">
       <Card
         style={{
           backgroundImage:
@@ -43,7 +43,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -51,7 +51,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={65} duration={2} delay={0}></CountUp>+
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -71,7 +71,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -79,7 +79,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={65000} duration={2} delay={0}></CountUp>Kg
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -99,7 +99,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -107,7 +107,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={5700} duration={2} delay={0}></CountUp>Kg
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -115,7 +115,7 @@ export default function ImpactPage() {
               of food saved from wastage
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -135,7 +135,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -143,7 +143,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={38} duration={2} delay={0}></CountUp>%
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -151,7 +151,7 @@ export default function ImpactPage() {
               higher revenue with A3S drying
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -159,7 +159,7 @@ export default function ImpactPage() {
               compared to traditional
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -179,7 +179,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -187,7 +187,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={80} duration={2} delay={0}></CountUp>%
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -195,7 +195,7 @@ export default function ImpactPage() {
               higher yield with A3S seedings vs
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -216,7 +216,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -224,7 +224,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={2} duration={3} delay={0}></CountUp>Tons
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -232,7 +232,7 @@ export default function ImpactPage() {
               of carbon dioxide (CO2) emissions
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -252,7 +252,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -260,7 +260,7 @@ export default function ImpactPage() {
               <CountUp start={0} end={70} duration={2} delay={0}></CountUp>%
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -281,7 +281,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -290,7 +290,7 @@ export default function ImpactPage() {
               +
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="white"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -310,7 +310,7 @@ export default function ImpactPage() {
             }}
           >
             <Typography
-              h3
+              variant="h3"
               size={50}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -318,7 +318,7 @@ export default function ImpactPage() {
               3 permanent and 6
             </Typography>
             <Typography
-              h3
+              variant="h3"
               size={20}
               color="green"
               sx={{ margin: "0 auto", fontSize: "2.8vh", fontWeight: "bold" }}
@@ -328,6 +328,6 @@ export default function ImpactPage() {
           </Card>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 }
