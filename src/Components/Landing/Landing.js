@@ -13,20 +13,21 @@ export default function LandingPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [areInputsInvalid, setareInputsInvalid] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
 
   const user = props.user;
   const setuser = props.setuser;
 
-  const loginHandler = () => {
+  const loginHandler = async () => {
     if (email.includes("@") && password.length >= 3) {
       setareInputsInvalid(false);
-      if (Authenticate(email, password)) {
+      if (await Authenticate(email, password)) {
         setIsLoggedIn(true);
         console.log(setIsLoggedIn);
       } else {
-        console.log("error");
+        setFailed(true);
       }
     } else {
       setareInputsInvalid(true);
@@ -101,6 +102,15 @@ export default function LandingPage(props) {
           style={{ marginTop: "2rem", textAlign: "center" }}
         >
           Please enter the valid credentials
+        </Typography>
+      )}
+      {failed && (
+        <Typography
+          variant="h6"
+          color={"darkred"}
+          style={{ marginTop: "2rem", textAlign: "center" }}
+        >
+          invalid credentials
         </Typography>
       )}
     </Card>

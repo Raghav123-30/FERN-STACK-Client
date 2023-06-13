@@ -245,6 +245,7 @@ export default function LocationEditModal() {
               color="error"
               onClick={() => {
                 setOtpModal(false);
+                setIsEditModalOpen(false);
               }}
             >
               Cancel
